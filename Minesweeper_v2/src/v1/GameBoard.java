@@ -192,7 +192,9 @@ public class GameBoard {
     }
 
     /**
-     * @TODO fix this implementation. Should only run once
+     * Checks bomb count around a given tile on the game board
+     * @param x the x coordinate of the tile to be checked
+     * @param y the y coordinate of the tile to be checked
      */
     private int checkBombCount(int x, int y) {
         int count = 0;
