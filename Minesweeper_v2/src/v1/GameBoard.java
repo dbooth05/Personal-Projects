@@ -182,12 +182,6 @@ public class GameBoard {
             board[x][y].setFlag();
         }
 
-//		checkBombCount(x, y);
-
-//		printBoard();
-//
-//		System.out.println();
-
         return cont;
     }
 
@@ -212,23 +206,6 @@ public class GameBoard {
 
         }
         return count;
-
-
-//                int amount = 0;
-//
-//                if (i > 0 && board[i-1][j].getIsBomb()) {
-//                    amount++;
-//                } if (i > 0 && j < size - 1 && board[i-1][j+1].getIsBomb()) {
-//                    amount++;
-//                } if (i > 0 && j > 0 && board[i-1][j-1].getIsBomb()) {
-//                    amount++;
-//                } if (i == 0 && j > 0 && board[i][j-1].getIsBomb()) {
-//                    amount++;
-//                } if (i == 0 && j < size - 1 && board[i][j+1].getIsBomb()) {
-//                    amount++;
-//                } if (i == size - 1 && board[i][j])
-//
-//                board[i][j].addAround(amount);
     }
 
 }
