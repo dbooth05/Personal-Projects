@@ -165,7 +165,7 @@ public class GameBoardGUI extends JFrame {
         t.setSize(200, 50);
         title.add(t);
 
-        //functionaly calling game to start?
+        //functionally calling game to start?
         frame.add(grid, BorderLayout.CENTER);
         fillBoard();
 
@@ -334,7 +334,7 @@ public class GameBoardGUI extends JFrame {
                     buttons[i][j].setText("B");
                 } else if (board[i][j].getIsFlagged()) {
                     buttons[i][j].setText("Flagged");
-                } else if (!board[i][j].getIsFlagged()) {
+                } else {
                     buttons[i][j].setText("");
                 }
 
@@ -356,6 +356,7 @@ public class GameBoardGUI extends JFrame {
 
                 if (!board[i][j].getIsRevealed() && !board[i][j].getIsBomb()) {
                     win = false;
+                    break;
                 }
 
             }
@@ -430,7 +431,7 @@ public class GameBoardGUI extends JFrame {
 
     /**
      * Shows play again options
-     * @TODO make able to customise the difficulty and size seperately
+     * @TODO make able to customise the difficulty and size separately
      */
     private void playAgain() {
 
