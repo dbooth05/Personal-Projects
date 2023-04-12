@@ -12,7 +12,8 @@ public class PlayGame {
 
         Scanner sc = new Scanner(System.in);
         int difficulty;
-        String playAgain = "y";
+        String playAgain = "y"; //UNCOMMENT TO MAKE LOOP WORK
+//        String playAgain = "n"; //Comment for no gui
 
         while (playAgain.equals("y")) {
 
@@ -30,12 +31,12 @@ public class PlayGame {
             }
 
             if (difficulty == 1) {
-                game = new GameBoard(5, 30);
+                game = new GameBoard(5, 20);
 //				game = new GameBoard(10, 20);
             } else if (difficulty == 2) {
                 game = new GameBoard(15, 30);
             } else if (difficulty == 3) {
-                game = new GameBoard(20, 40);
+                game = new GameBoard(100, 40);
             }
 
             System.out.println();
@@ -43,9 +44,11 @@ public class PlayGame {
             System.out.println("To place flag on tile enter 'f' or 'r' to reveal");
             System.out.println();
 
+            game.printEnd();
+
             boolean contGame = true;
             while (contGame) {
-                System.out.print("Enter coords: ");
+                System.out.println("Enter coords: ");
                 String coords = sc.next();
                 System.out.println();
                 System.out.print("Place flag (f) or reveal (r): ");
@@ -53,7 +56,6 @@ public class PlayGame {
 
                 contGame = game.makeMove(coords, move);
                 if (!contGame) {
-                    System.out.println("you lost");
                     game.printEnd();
                 }
 
@@ -73,6 +75,14 @@ public class PlayGame {
         }
 
         sc.close();
+
+
+
+//        GameBoardGUI gui = new GameBoardGUI(5, 30, "Easy");
+
+
+        System.out.println("game over");
+
     }
 
 }

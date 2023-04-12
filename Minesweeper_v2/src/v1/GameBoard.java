@@ -1,13 +1,18 @@
 package v1;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Random;
 
 public class GameBoard {
 
-    GameTile[][] board;
-    int difficulty;
-    int size;
-    boolean bomb;
+    private GameTile[][] board;
+    private int difficulty;
+    private int size;
 
     /**
      * Constructor to make new game board of given difficulty and size
@@ -17,6 +22,7 @@ public class GameBoard {
     public GameBoard(int size, int difficulty) {
 
         board = new GameTile[size][size];
+
         this.difficulty = difficulty;
         this.size = size;
 
@@ -169,17 +175,29 @@ public class GameBoard {
      */
     public boolean makeMove(String coords, String move) {
 
+        coords = coords.replaceAll(" ", "");
         String[] coord = coords.split(",");
 
-        int x = Integer.parseInt(coord[0]);
-        int y = Integer.parseInt(coord[1]);
+        int x = Integer.parseInt(coord[1]);
+        int y = Integer.parseInt(coord[0]);
 
         boolean cont = true;
 
-        if (move.toLowerCase().equals("r")) {
-            cont = board[y][x].click();
-        } else if (move.toLowerCase().equals("f")) {
+        if (move.equalsIgnoreCase("r")) {
+
+            if (board[x][y].getIsBomb()) {
+                cont = board[x][y].click();
+                System.out.println("You lost");
+            } else {
+                revealZerosRec(x, y);
+            }
+        } else if (move.equalsIgnoreCase("f")) {
             board[x][y].setFlag();
+        }
+
+        if (checkWin()) {
+            cont = false;
+            System.out.println("You won");
         }
 
         return cont;
@@ -208,4 +226,51 @@ public class GameBoard {
         return count;
     }
 
+    /**
+     * Reveals all adjacent spots to a zero
+     * @param x the x coordinate of spot being revealed and checking adjacents
+     * @param y the y coordinate of spot being revealed and checking adjacents
+     */
+    private void revealZerosRec(int x, int y) {
+
+        if (x < 0 || y < 0 || x >= size || y >= size) {
+            return;
+        } else if (board[x][y].getAround() != 0) {
+            board[x][y].reveal();
+            return;
+        } else if (board[x][y].getIsRevealed()) {
+            return;
+        } else {
+            board[x][y].reveal();
+            revealZerosRec(x-1, y);
+            revealZerosRec(x, y-1);
+            revealZerosRec(x, y+1);
+            revealZerosRec(x+1, y);
+            revealZerosRec(x-1, y-1);
+            revealZerosRec(x-1, y+1);
+            revealZerosRec(x+1, y-1);
+            revealZerosRec(x+1, y+1);
+
+        }
+    }
+
+
+    private boolean checkWin() {
+
+        boolean win = true;
+
+        for (int i = 0; i < size; i++) {
+
+            for (int j = 0; j < size; j++) {
+
+                if (!board[i][j].getIsRevealed() && !board[i][j].getIsBomb()) {
+                    win = false;
+                }
+
+            }
+
+        }
+
+        return win;
+    }
 }

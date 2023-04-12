@@ -53,12 +53,16 @@ public class GameTile {
      * Setter method to set flag on tile
      */
     public void setFlag() {
-        isFlagged = true;
+        if (isFlagged) {
+            isFlagged = false;
+        } else {
+            isFlagged = true;
+        }
     }
 
     /**
      * Takes turn on tile, also checks if tile is a bomb
-     * @return true if tile is empty, and false if its a bomb
+     * @return true if tile is empty, and false if it's a bomb
      */
     public boolean click() {
         if (isBomb) {
@@ -67,6 +71,10 @@ public class GameTile {
             isRevealed = true;
             return true;
         }
+    }
+
+    public void reveal() {
+        isRevealed = true;
     }
 
 }

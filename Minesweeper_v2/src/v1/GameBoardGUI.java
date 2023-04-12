@@ -1,0 +1,329 @@
+package v1;
+
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Random;
+
+public class GameBoardGUI extends JFrame {
+
+    private GameTile[][] board;
+    private int difficulty;
+    private int size;
+
+    //JFrame and GUI stuff
+    private JFrame frame;
+    private JButton reset;
+    private JButton giveUp;
+    private JPanel buttonPanel;
+
+    private JPanel title;
+    private Container grid;
+    private JButton[][] buttons;
+
+    private String diff;
+
+    boolean cont;
+
+    public GameBoardGUI (int size, int difficulty, String diff) {
+
+        board = new GameTile[size][size];
+        buttons = new JButton[size][size];
+
+        cont = true;
+
+        this.difficulty = difficulty;
+        this.size = size;
+        this.diff = diff;
+
+        frame = new JFrame();
+        buttonPanel = new JPanel();
+        title = new JPanel();
+        grid = new Container();
+
+        reset = new JButton();
+        reset.setText("Reset");
+        giveUp = new JButton();
+        giveUp.setText("Give Up");
+
+        frame.setSize(900, 900);
+        frame.setLayout(new BorderLayout());
+        frame.add(title, BorderLayout.NORTH);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+        reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resetBoard();
+            }
+        });
+        giveUp.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                endGame(false);
+            }
+        });
+
+        grid.setLayout(new GridLayout(size, size));
+
+        //initialize each button and adds to grid to allow button clicks
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                buttons[i][j] = new JButton();
+                buttons[i][j].setBorder(new LineBorder(Color.BLACK));
+                buttons[i][j].setBackground(Color.GRAY);
+                buttons[i][j].addMouseListener(new MouseClickListener(i, j));
+                grid.add(buttons[i][j]);
+            }
+        }
+
+        //adding buttons to panel
+        buttonPanel.add(reset);
+        buttonPanel.add(giveUp);
+
+        JTextField t = new JTextField("Mine Sweeper \t Difficulty: " + diff);
+        t.setEditable(false);
+        t.setSize(200, 50);
+        title.add(t);
+
+        //functionaly calling game to start?
+        frame.add(grid, BorderLayout.CENTER);
+        fillBoard();
+
+        //frame stuff
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+    }
+
+    class MouseClickListener implements MouseListener {
+        private int x;
+        private int y;
+        public MouseClickListener (int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                System.out.println("left click");
+                makeMove("left", x, y);
+            } else if (SwingUtilities.isRightMouseButton(e)) {
+                System.out.println("right click");
+                makeMove("right", x, y);
+            }
+
+            guiUpdate();
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }
+
+
+    /**
+     * Fills board with tiles, places bombs with a chance based on difficulty
+     */
+    private void fillBoard() {
+
+        Random rand = new Random();
+        GameTile temp;
+
+        for (int i = 0; i < size; i++) {
+
+            for (int j = 0; j < size; j++) {
+
+                int k = rand.nextInt(100);
+                if (k <= difficulty) {
+                    temp = new GameTile(true, false, false);
+                } else {
+                    temp = new GameTile(false, false, false);
+                }
+                board[i][j] = temp;
+
+            }
+
+        }
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                board[i][j].addAround(checkBombCount(i, j));
+            }
+        }
+
+    }
+
+    /**
+     * Checks bomb count around a given tile on the game board
+     * @param x the x coordinate of the tile to be checked
+     * @param y the y coordinate of the tile to be checked
+     */
+    private int checkBombCount(int x, int y) {
+        int count = 0;
+        for (int i = x - 1; i <= x + 1; i++) {
+
+            for (int j = y - 1; j <= y + 1; j++) {
+
+                if (i >= 0 && i < size && j >= 0 && j < size) {
+                    if (board[i][j].getIsBomb()) {
+                        count++;
+                    }
+                }
+
+            }
+
+        }
+        return count;
+    }
+
+    /**
+     * Makes the desired move on tile,
+     * @param click which move to be made, flag or reveal
+     * @param x the x coordinate of tile having move made on
+     * @param y the y coordinate of tile having move made on
+     * @return returns true for the game to continue
+     */
+    public boolean makeMove(String click, int x, int y) {
+
+        System.out.println("Made move: " + click + " at " + x + ", " + y);
+
+        if (click.equals("left")) {
+            if (board[x][y].getIsBomb()) {
+                cont = board[x][y].click();
+                endGame(false);
+                System.out.println("lost");
+            } else {
+                revealZerosRec(x, y);
+            }
+
+        } else if (click.equals("right")) {
+            board[x][y].setFlag();
+        }
+
+        guiUpdate();
+
+        return cont;
+    }
+
+    /**
+     * updates gui elements
+     */
+    public void guiUpdate() {
+
+        if (!cont) {
+//            endGame(false);
+        }
+
+        if (checkWin()) {
+            endGame(true);
+        }
+
+        System.out.println("made it here");
+
+        for (int i = 0; i < size; i++) {
+
+            for (int j = 0; j < size; j++) {
+
+                if (board[i][j].getIsRevealed() && !board[i][j].getIsBomb()) {
+                    int num = board[i][j].getAround();
+                    buttons[i][j].setText(String.valueOf(num));
+                    buttons[i][j].setBackground(Color.white);
+                } else if (board[i][j].getIsRevealed() && board[i][j].getIsBomb()) {
+                    buttons[i][j].setText("B");
+                } else if (board[i][j].getIsFlagged()) {
+                    buttons[i][j].setText("Flagged");
+                } else if (!board[i][j].getIsFlagged()) {
+                    buttons[i][j].setText("");
+                }
+
+            }
+        }
+    }
+
+
+    private boolean checkWin() {
+
+
+
+        return true;
+    }
+
+    /**
+     * @TODO Do this method, maybe
+     */
+    private void resetBoard() {
+        System.out.println("reset");
+    }
+
+    /**
+     * @TODO Do this method, ends game asks whether to play another game
+     */
+    private void endGame(boolean win) {
+
+//        JTextField t = new JTextField();
+
+//        if (win) {
+//            t.setText("You Won");
+//        } else {
+//            t.setText("You lost");
+//        }
+//
+//        frame.getContentPane().removeAll();
+//
+//
+//        frame.add(t, title);
+        frame.validate();
+
+    }
+
+    /**
+     * Reveals all adjacent spots to a zero
+     * @param x the x coordinate of spot being revealed and checking adjacents
+     * @param y the y coordinate of spot being revealed and checking adjacents
+     */
+    private void revealZerosRec(int x, int y) {
+
+        if (x < 0 || y < 0 || x >= size || y >= size) {
+            return;
+        } else if (board[x][y].getAround() != 0) {
+            board[x][y].reveal();
+            return;
+        } else if (board[x][y].getIsRevealed()) {
+            return;
+        } else {
+            board[x][y].reveal();
+            revealZerosRec(x-1, y);
+            revealZerosRec(x, y-1);
+            revealZerosRec(x, y+1);
+            revealZerosRec(x+1, y);
+            revealZerosRec(x-1, y-1);
+            revealZerosRec(x-1, y+1);
+            revealZerosRec(x+1, y-1);
+            revealZerosRec(x+1, y+1);
+
+        }
+    }
+
+}
