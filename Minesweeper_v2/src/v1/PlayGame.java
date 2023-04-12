@@ -82,7 +82,7 @@ public class PlayGame {
 
 
 
-        GameBoardGUI gui = new GameBoardGUI(5, 30, "Easy");
+        GameBoardGUI gui = new GameBoardGUI();
 
 
         System.out.println("game over");

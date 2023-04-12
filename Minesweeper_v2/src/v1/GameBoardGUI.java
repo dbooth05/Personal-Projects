@@ -33,18 +33,90 @@ public class GameBoardGUI extends JFrame {
 
     boolean cont;
 
-    public GameBoardGUI (int size, int difficulty, String diff) {
+    public GameBoardGUI () {
+
+        cont = true;
+
+        frame = new JFrame();
+
+        frame.setSize(900, 900);
+        frame.setLayout(new BorderLayout());
+
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+
+        playAgain();
+
+//        buttonPanel = new JPanel();
+//        title = new JPanel();
+//        grid = new Container();
+//
+//        reset = new JButton();
+//        reset.setText("Reset");
+//        giveUp = new JButton();
+//        giveUp.setText("Give Up");
+//
+//        frame.setSize(900, 900);
+//        frame.setLayout(new BorderLayout());
+//        frame.add(title, BorderLayout.NORTH);
+//        frame.add(buttonPanel, BorderLayout.SOUTH);
+//        reset.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                resetBoard();
+//            }
+//        });
+//        giveUp.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                endGame(false);
+//            }
+//        });
+//
+//        grid.setLayout(new GridLayout(size, size));
+//
+//        //initialize each button and adds to grid to allow button clicks
+//        for (int i = 0; i < size; i++) {
+//            for (int j = 0; j < size; j++) {
+//                buttons[i][j] = new JButton();
+//                buttons[i][j].setBorder(new LineBorder(Color.BLACK));
+//                buttons[i][j].setBackground(Color.GRAY);
+//                buttons[i][j].addMouseListener(new MouseClickListener(i, j));
+//                grid.add(buttons[i][j]);
+//            }
+//        }
+//
+//        //adding buttons to panel
+//        buttonPanel.add(reset);
+//        buttonPanel.add(giveUp);
+//
+//        JTextField t = new JTextField("Mine Sweeper \t Difficulty: " + diff);
+//        t.setEditable(false);
+//        t.setSize(200, 50);
+//        title.add(t);
+//
+//        //functionaly calling game to start?
+//        frame.add(grid, BorderLayout.CENTER);
+//        fillBoard();
+//
+//        //frame stuff
+//        frame.setLocationRelativeTo(null);
+//        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+//        frame.setVisible(true);
+
+    }
+
+    private void genGame() {
+
+        frame.getContentPane().removeAll();
+
+        cont = true;
 
         board = new GameTile[size][size];
         buttons = new JButton[size][size];
 
-        cont = true;
-
-        this.difficulty = difficulty;
-        this.size = size;
-        this.diff = diff;
-
-        frame = new JFrame();
         buttonPanel = new JPanel();
         title = new JPanel();
         grid = new Container();
@@ -97,10 +169,9 @@ public class GameBoardGUI extends JFrame {
         frame.add(grid, BorderLayout.CENTER);
         fillBoard();
 
-        //frame stuff
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        frame.validate();
+        frame.repaint();
+
 
     }
 
@@ -365,7 +436,7 @@ public class GameBoardGUI extends JFrame {
 
         frame.getContentPane().removeAll();
 
-        JPanel diff = new JPanel();
+        JPanel differ = new JPanel();
         JTextArea a = new JTextArea("Select Difficulty");
         JButton easy = new JButton("Easy");
         JButton med = new JButton("Medium");
@@ -375,35 +446,51 @@ public class GameBoardGUI extends JFrame {
         easy.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GameBoardGUI(5, 10, "Easy");
+//                new GameBoardGUI(5, 10, "Easy");
+                size = 5;
+                difficulty = 10;
+                diff = "Easy";
+                genGame();
             }
         });
         med.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GameBoardGUI(10, 20, "Medium");
+//                new GameBoardGUI(10, 20, "Medium");
+                size = 10;
+                difficulty = 20;
+                diff = "Medium";
+                genGame();
             }
         });
         hard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GameBoardGUI(15, 25, "Hard");
+//                new GameBoardGUI(15, 25, "Hard");
+                size = 15;
+                difficulty = 25;
+                diff = "Hard";
+                genGame();
             }
         });
         extr.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GameBoardGUI(25, 40, "Extreme");
+//                new GameBoardGUI(25, 40, "Extreme");
+                size = 25;
+                difficulty = 40;
+                diff = "Extreme";
+                genGame();
             }
         });
 
-        diff.add(a);
-        diff.add(easy);
-        diff.add(med);
-        diff.add(hard);
-        diff.add(extr);
+        differ.add(a);
+        differ.add(easy);
+        differ.add(med);
+        differ.add(hard);
+        differ.add(extr);
 
-        frame.add(diff);
+        frame.add(differ);
 
         frame.revalidate();
         frame.repaint();
