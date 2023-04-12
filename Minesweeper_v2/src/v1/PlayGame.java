@@ -12,8 +12,8 @@ public class PlayGame {
 
         Scanner sc = new Scanner(System.in);
         int difficulty;
-        String playAgain = "y"; //UNCOMMENT TO MAKE LOOP WORK
-//        String playAgain = "n"; //Comment for no gui
+//        String playAgain = "y"; //UNCOMMENT TO MAKE LOOP WORK
+        String playAgain = "n"; //Comment for no gui
 
         while (playAgain.equals("y")) {
 
@@ -78,7 +78,7 @@ public class PlayGame {
 
 
 
-//        GameBoardGUI gui = new GameBoardGUI(5, 30, "Easy");
+        GameBoardGUI gui = new GameBoardGUI(5, 30, "Easy");
 
 
         System.out.println("game over");

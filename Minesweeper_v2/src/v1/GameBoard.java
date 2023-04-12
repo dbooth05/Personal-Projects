@@ -254,7 +254,10 @@ public class GameBoard {
         }
     }
 
-
+    /**
+     * Checks to determine whether the game is done.
+     * @return false if the game is over, and true if the game is not over.
+     */
     private boolean checkWin() {
 
         boolean win = true;

@@ -173,6 +173,8 @@ public class GameBoardGUI extends JFrame {
             }
         }
 
+        printEnd();
+
     }
 
     /**
@@ -203,9 +205,8 @@ public class GameBoardGUI extends JFrame {
      * @param click which move to be made, flag or reveal
      * @param x the x coordinate of tile having move made on
      * @param y the y coordinate of tile having move made on
-     * @return returns true for the game to continue
      */
-    public boolean makeMove(String click, int x, int y) {
+    public void makeMove(String click, int x, int y) {
 
         System.out.println("Made move: " + click + " at " + x + ", " + y);
 
@@ -224,7 +225,6 @@ public class GameBoardGUI extends JFrame {
 
         guiUpdate();
 
-        return cont;
     }
 
     /**
@@ -233,7 +233,7 @@ public class GameBoardGUI extends JFrame {
     public void guiUpdate() {
 
         if (!cont) {
-//            endGame(false);
+            endGame(false);
         }
 
         if (checkWin()) {
@@ -262,12 +262,27 @@ public class GameBoardGUI extends JFrame {
         }
     }
 
-
+    /**
+     * Checks to determine whether the game is done.
+     * @return false if the game is over, and true if the game is not over.
+     */
     private boolean checkWin() {
 
+        boolean win = true;
 
+        for (int i = 0; i < size; i++) {
 
-        return true;
+            for (int j = 0; j < size; j++) {
+
+                if (!board[i][j].getIsRevealed() && !board[i][j].getIsBomb()) {
+                    win = false;
+                }
+
+            }
+
+        }
+
+        return win;
     }
 
     /**
@@ -282,19 +297,96 @@ public class GameBoardGUI extends JFrame {
      */
     private void endGame(boolean win) {
 
-//        JTextField t = new JTextField();
+        frame.getContentPane().removeAll();
 
-//        if (win) {
-//            t.setText("You Won");
-//        } else {
-//            t.setText("You lost");
-//        }
-//
-//        frame.getContentPane().removeAll();
-//
-//
-//        frame.add(t, title);
-        frame.validate();
+        JPanel j = new JPanel();
+
+        JTextArea a = new JTextArea();
+        a.setFont(new Font(a.getFont().getFontName(), a.getFont().getStyle(), 80));
+
+
+        if (win) {
+            a.setText("YOU WON");
+            System.out.println("win");
+        } else {
+            a.setText("YOU LOSE");
+            System.out.println("lose");
+        }
+
+        j.add(a);
+
+        frame.add(j, BorderLayout.NORTH);
+
+        JButton againY = new JButton("Yes");
+        JButton againN = new JButton("No");
+
+        againY.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playAgain();
+            }
+        });
+        againN.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+        JPanel again = new JPanel();
+        JTextArea b = new JTextArea("Play Again?");
+        b.setFont(new Font(b.getFont().getFontName(), b.getFont().getStyle(), 30));
+
+        again.add(b);
+        again.add(againY, BorderLayout.WEST);
+        again.add(againN, BorderLayout.EAST);
+
+        frame.add(again, BorderLayout.CENTER);
+
+        frame.revalidate();
+        frame.repaint();
+
+    }
+
+
+    private void playAgain() {
+
+        frame.getContentPane().removeAll();
+
+        JPanel diff = new JPanel();
+        JTextArea a = new JTextArea("Select Difficulty");
+        JButton easy = new JButton("Easy");
+        JButton med = new JButton("Medium");
+        JButton hard = new JButton("Hard");
+
+        easy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new GameBoardGUI(5, 20, "Easy");
+            }
+        });
+        med.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new GameBoardGUI(10, 30, "Medium");
+            }
+        });
+        hard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new GameBoardGUI(15, 40, "Hard");
+            }
+        });
+
+        diff.add(a);
+        diff.add(easy);
+        diff.add(med);
+        diff.add(hard);
+
+        frame.add(diff);
+
+        frame.revalidate();
+        frame.repaint();
 
     }
 
@@ -322,6 +414,52 @@ public class GameBoardGUI extends JFrame {
             revealZerosRec(x-1, y+1);
             revealZerosRec(x+1, y-1);
             revealZerosRec(x+1, y+1);
+
+        }
+    }
+
+    public void printEnd() {
+        System.out.println();
+
+        String line1 = "   | ";
+        String line2 = "-----";
+
+        for (int i = 0; i < size; i++) {
+            if (i >= 10) {
+                line1 += i + " ";
+            } else {
+                line1 += i + "  ";
+            }
+            line2 += "---";
+        }
+
+        System.out.println(line1);
+        System.out.println(line2);
+
+        for (int i = 0; i < size; i++) {
+
+            String row = "";
+            if (i < 10) {
+                row = i + "  | ";
+            } else {
+                row = i + " | ";
+            }
+
+            for (int j = 0; j < size; j++) {
+
+                if (board[i][j].getIsBomb()) {
+                    row += "B  ";
+                } else if (board[i][j].getIsFlagged()) {
+                    row += "F  ";
+                } else if (board[i][j].getAround() != 0) {
+                    row += board[i][j].getAround() + "  ";
+                } else {
+                    row += "   ";
+                }
+
+            }
+
+            System.out.println(row);
 
         }
     }
