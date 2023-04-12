@@ -374,7 +374,9 @@ public class GameBoardGUI extends JFrame {
     }
 
     /**
-     * @TODO Do this method, ends game asks whether to play another game
+     * Called when game is won or lost. Asks whether they want to play again, if yes
+     * calls playAgain() to determine size and difficulty
+     * @param win holds the boolean value if player won or lost game
      */
     private void endGame(boolean win) {
 
