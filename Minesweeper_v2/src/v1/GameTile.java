@@ -68,6 +68,7 @@ public class GameTile {
      * @return true if tile is empty, and false if it's a bomb
      */
     public boolean click() {
+
         if (isBomb) {
             return false;
         } else {

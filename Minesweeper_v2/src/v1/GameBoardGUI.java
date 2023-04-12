@@ -215,6 +215,11 @@ public class GameBoardGUI extends JFrame {
         System.out.println("Made move: " + click + " at " + x + ", " + y);
 
         if (click.equals("left")) {
+
+            if (board[x][y].getIsFlagged()) {
+                return;
+            }
+
             if (board[x][y].getIsBomb()) {
                 cont = board[x][y].click();
                 endGame(false);
@@ -352,7 +357,10 @@ public class GameBoardGUI extends JFrame {
 
     }
 
-
+    /**
+     * Shows play again options
+     * @TODO make able to customise the difficulty and size seperately
+     */
     private void playAgain() {
 
         frame.getContentPane().removeAll();
@@ -362,23 +370,30 @@ public class GameBoardGUI extends JFrame {
         JButton easy = new JButton("Easy");
         JButton med = new JButton("Medium");
         JButton hard = new JButton("Hard");
+        JButton extr = new JButton("Extreme");
 
         easy.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GameBoardGUI(5, 20, "Easy");
+                new GameBoardGUI(5, 10, "Easy");
             }
         });
         med.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GameBoardGUI(10, 30, "Medium");
+                new GameBoardGUI(10, 20, "Medium");
             }
         });
         hard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GameBoardGUI(15, 40, "Hard");
+                new GameBoardGUI(15, 25, "Hard");
+            }
+        });
+        extr.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new GameBoardGUI(25, 40, "Extreme");
             }
         });
 
@@ -386,6 +401,7 @@ public class GameBoardGUI extends JFrame {
         diff.add(easy);
         diff.add(med);
         diff.add(hard);
+        diff.add(extr);
 
         frame.add(diff);
 
