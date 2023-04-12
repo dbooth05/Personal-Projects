@@ -77,8 +77,19 @@ public class GameTile {
         }
     }
 
+    /**
+     * Reveals the tile, used for recursive revealing tiles
+     */
     public void reveal() {
         isRevealed = true;
+    }
+
+    /**
+     * Resets tile to not revealed
+     */
+    public void reset() {
+        isRevealed = false;
+        isFlagged = false;
     }
 
 }

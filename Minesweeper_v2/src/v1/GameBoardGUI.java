@@ -4,6 +4,7 @@ package v1;
   @author Dylan Booth
  **/
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -11,6 +12,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 public class GameBoardGUI extends JFrame {
@@ -333,7 +338,20 @@ public class GameBoardGUI extends JFrame {
                 } else if (board[i][j].getIsRevealed() && board[i][j].getIsBomb()) {
                     buttons[i][j].setText("B");
                 } else if (board[i][j].getIsFlagged()) {
-                    buttons[i][j].setText("Flagged");
+                    try {
+                        BufferedImage img = ImageIO.read(new File("flag.png"));
+                        Image image = new ImageIcon(img).getImage().getScaledInstance(buttons[i][j].getWidth(), buttons[i][j].getHeight(), Image.SCALE_SMOOTH);
+                        Icon icon = new ImageIcon(image);
+                        buttons[i][j].setIcon((Icon) icon);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+//                    buttons[i][j].setText("Flagged");
+                } else if (!board[i][j].getIsRevealed() && !board[i][j].getIsFlagged()) {
+                    buttons[i][j].setText("");
+                    buttons[i][j].setBackground(Color.gray);
+                    buttons[i][j].setIcon(null);
                 } else {
                     buttons[i][j].setText("");
                 }
@@ -367,9 +385,20 @@ public class GameBoardGUI extends JFrame {
     }
 
     /**
-     * @TODO Do this method, maybe
+     * Resets the game board to display starting screen
      */
     private void resetBoard() {
+
+        for (int i = 0; i < size; i++) {
+
+            for (int j = 0; j < size; j++) {
+
+                board[i][j].reset();
+
+            }
+
+        }
+        guiUpdate();
         System.out.println("reset");
     }
 
@@ -386,7 +415,7 @@ public class GameBoardGUI extends JFrame {
 
         JTextArea a = new JTextArea();
         a.setFont(new Font(a.getFont().getFontName(), a.getFont().getStyle(), 80));
-
+        a.setEditable(false);
 
         if (win) {
             a.setText("YOU WON");
@@ -446,12 +475,14 @@ public class GameBoardGUI extends JFrame {
         JButton hard = new JButton("Hard");
         JButton extr = new JButton("Extreme");
 
+        a.setEditable(false);
+
         easy.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 //                new GameBoardGUI(5, 10, "Easy");
                 size = 5;
-                difficulty = 10;
+                difficulty = 20;
                 diff = "Easy";
                 genGame();
             }
@@ -461,7 +492,7 @@ public class GameBoardGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
 //                new GameBoardGUI(10, 20, "Medium");
                 size = 10;
-                difficulty = 20;
+                difficulty = 25;
                 diff = "Medium";
                 genGame();
             }
@@ -471,7 +502,7 @@ public class GameBoardGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
 //                new GameBoardGUI(15, 25, "Hard");
                 size = 15;
-                difficulty = 25;
+                difficulty = 30;
                 diff = "Hard";
                 genGame();
             }
