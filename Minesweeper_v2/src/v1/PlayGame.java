@@ -1,5 +1,9 @@
 package v1;
 
+/**
+ @author Dylan Booth
+ **/
+
 import java.util.Scanner;
 
 

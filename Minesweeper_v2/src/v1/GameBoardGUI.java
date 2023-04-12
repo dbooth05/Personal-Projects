@@ -1,5 +1,9 @@
 package v1;
 
+/**
+  @author Dylan Booth
+ **/
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;

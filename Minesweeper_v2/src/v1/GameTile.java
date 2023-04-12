@@ -1,5 +1,8 @@
 package v1;
 
+/**
+ @author Dylan Booth
+ **/
 public class GameTile {
 
     private boolean isBomb;
