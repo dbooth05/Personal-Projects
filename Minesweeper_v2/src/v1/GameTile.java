@@ -54,13 +54,15 @@ public class GameTile {
 
     /**
      * Setter method to set flag on tile
+     * @return returns if there is a flag on that tile
      */
-    public void setFlag() {
+    public boolean setFlag() {
         if (isFlagged) {
             isFlagged = false;
         } else {
             isFlagged = true;
         }
+        return isFlagged;
     }
 
     /**
