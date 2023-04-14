@@ -41,9 +41,13 @@ public class GameBoardGUI extends JFrame {
 
     boolean cont;
 
+    Color c;
+
     public GameBoardGUI () {
 
         cont = true;
+
+        c = new Color(78, 78, 78);
 
         frame = new JFrame();
 
@@ -180,6 +184,7 @@ public class GameBoardGUI extends JFrame {
 
         Random rand = new Random();
         GameTile temp;
+        bombs = 0;
 
         for (int i = 0; i < size; i++) {
 
@@ -390,10 +395,13 @@ public class GameBoardGUI extends JFrame {
         frame.getContentPane().removeAll();
 
         JPanel j = new JPanel();
+        j.setBackground(c);
 
         JTextArea a = new JTextArea();
         a.setFont(new Font(a.getFont().getFontName(), a.getFont().getStyle(), 80));
         a.setEditable(false);
+        a.setForeground(Color.white);
+        a.setBackground(c);
 
         JLabel gif;
         Image img;
@@ -433,8 +441,12 @@ public class GameBoardGUI extends JFrame {
         });
 
         JPanel again = new JPanel();
+        again.setBackground(c);
+
         JTextArea b = new JTextArea("Play Again?");
         b.setFont(new Font(b.getFont().getFontName(), b.getFont().getStyle(), 30));
+        b.setBackground(c);
+        b.setForeground(Color.white);
 
         again.add(b);
         again.add(againY, BorderLayout.WEST);
@@ -457,9 +469,32 @@ public class GameBoardGUI extends JFrame {
     private void playAgain() {
 
         frame.getContentPane().removeAll();
+        frame.getContentPane().setBackground(c);
 
         JPanel differ = new JPanel();
+        differ.setBackground(c);
+
+        JPanel tl = new JPanel();
+        tl.setBackground(c);
+        tl.setSize(200, 600);
+
+        JTextArea name = new JTextArea("Minesweeper");
+        name.setFont(new Font(name.getFont().getFontName(), name.getFont().getStyle(), 40));
+        name.setBackground(c);
+        name.setForeground(Color.white);
+
+        JTextArea author = new JTextArea("Dylan Booth");
+        author.setFont(new Font(author.getFont().getFontName(), author.getFont().getStyle(), 20));
+        author.setBackground(c);
+        author.setForeground(Color.white);
+
+        tl.add(name, BorderLayout.NORTH);
+        tl.add(author, BorderLayout.SOUTH);
+        frame.add(tl, BorderLayout.NORTH);
+
         JTextArea a = new JTextArea("Select Difficulty");
+        a.setBackground(c);
+        a.setForeground(Color.white);
         JButton easy = new JButton("Easy");
         JButton med = new JButton("Medium");
         JButton hard = new JButton("Hard");
@@ -514,7 +549,7 @@ public class GameBoardGUI extends JFrame {
         differ.add(hard);
         differ.add(extr);
 
-        frame.add(differ);
+        frame.add(differ, BorderLayout.CENTER);
 
         frame.revalidate();
         frame.repaint();
