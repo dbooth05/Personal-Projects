@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
@@ -53,63 +52,6 @@ public class GameBoardGUI extends JFrame {
 
 
         playAgain();
-
-//        buttonPanel = new JPanel();
-//        title = new JPanel();
-//        grid = new Container();
-//
-//        reset = new JButton();
-//        reset.setText("Reset");
-//        giveUp = new JButton();
-//        giveUp.setText("Give Up");
-//
-//        frame.setSize(900, 900);
-//        frame.setLayout(new BorderLayout());
-//        frame.add(title, BorderLayout.NORTH);
-//        frame.add(buttonPanel, BorderLayout.SOUTH);
-//        reset.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                resetBoard();
-//            }
-//        });
-//        giveUp.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                endGame(false);
-//            }
-//        });
-//
-//        grid.setLayout(new GridLayout(size, size));
-//
-//        //initialize each button and adds to grid to allow button clicks
-//        for (int i = 0; i < size; i++) {
-//            for (int j = 0; j < size; j++) {
-//                buttons[i][j] = new JButton();
-//                buttons[i][j].setBorder(new LineBorder(Color.BLACK));
-//                buttons[i][j].setBackground(Color.GRAY);
-//                buttons[i][j].addMouseListener(new MouseClickListener(i, j));
-//                grid.add(buttons[i][j]);
-//            }
-//        }
-//
-//        //adding buttons to panel
-//        buttonPanel.add(reset);
-//        buttonPanel.add(giveUp);
-//
-//        JTextField t = new JTextField("Mine Sweeper \t Difficulty: " + diff);
-//        t.setEditable(false);
-//        t.setSize(200, 50);
-//        title.add(t);
-//
-//        //functionaly calling game to start?
-//        frame.add(grid, BorderLayout.CENTER);
-//        fillBoard();
-//
-//        //frame stuff
-//        frame.setLocationRelativeTo(null);
-//        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//        frame.setVisible(true);
 
     }
 
