@@ -7,6 +7,8 @@ package v1;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -496,6 +498,7 @@ public class GameBoardGUI extends JFrame {
         JButton med = new JButton("Medium");
         JButton hard = new JButton("Hard");
         JButton extr = new JButton("Extreme");
+        JButton cust = new JButton("Custom Difficulty");
 
         a.setEditable(false);
 
@@ -539,12 +542,19 @@ public class GameBoardGUI extends JFrame {
                 genGame();
             }
         });
+        cust.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                customDiff();
+            }
+        });
 
         differ.add(a);
         differ.add(easy);
         differ.add(med);
         differ.add(hard);
         differ.add(extr);
+        differ.add(cust);
 
         frame.add(differ, BorderLayout.CENTER);
 
@@ -552,6 +562,75 @@ public class GameBoardGUI extends JFrame {
         frame.repaint();
 
     }
+
+    /**
+     * Method to generate jframe for a custom game difficulty
+     * Customize size of board and the chance of a bomb on a tile.
+     */
+    private void customDiff() {
+
+        frame.getContentPane().removeAll();
+
+        JPanel custDiff = new JPanel();
+
+        // Selects size of board
+        JPanel siz = new JPanel();
+        JTextArea a = new JTextArea("Please select board size");
+        siz.add(a);
+
+        JSlider sizeSlide = new JSlider(5, 40);
+        JTextArea sizeNum = new JTextArea(String.valueOf(sizeSlide.getValue()));
+        sizeSlide.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                sizeNum.setText(String.valueOf(sizeSlide.getValue()));
+            }
+        });
+
+        siz.add(sizeSlide);
+        siz.add(sizeNum);
+
+
+        // Selects chance of bomb
+        JPanel dif = new JPanel();
+        JTextArea d = new JTextArea("Please select chance of tile being bomb");
+        dif.add(d);
+
+        JSlider diffSlide = new JSlider(5, 80);
+        JTextArea diffNum = new JTextArea(String.valueOf(diffSlide.getValue()));
+        diffSlide.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                diffNum.setText(String.valueOf(diffSlide.getValue()));
+            }
+        });
+        dif.add(diffSlide);
+        dif.add(diffNum);
+
+
+        custDiff.add(siz, BorderLayout.NORTH);
+        custDiff.add(dif, BorderLayout.CENTER);
+
+        JButton play = new JButton("Play");
+        play.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                size = sizeSlide.getValue();
+                difficulty = diffSlide.getValue();
+                diff = "Custom";
+                genGame();
+            }
+        });
+
+        custDiff.add(play);
+
+        frame.add(custDiff);
+
+        frame.revalidate();
+        frame.repaint();
+
+    }
+
 
     /**
      * Reveals all adjacent spots to a zero
