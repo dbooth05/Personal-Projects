@@ -15,7 +15,6 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.Random;
 
 public class GameBoardGUI extends JFrame {
@@ -389,8 +388,6 @@ public class GameBoardGUI extends JFrame {
      * @param win holds the boolean value if player won or lost game
      */
     private void endGame(boolean win) {
-
-        GridBagLayout g = new GridBagLayout();
 
         frame.getContentPane().removeAll();
 
