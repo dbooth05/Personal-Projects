@@ -463,7 +463,6 @@ public class GameBoardGUI extends JFrame {
 
     /**
      * Shows play again options
-     * @TODO make able to customise the difficulty and size separately
      */
     private void playAgain() {
 
@@ -572,14 +571,18 @@ public class GameBoardGUI extends JFrame {
         frame.getContentPane().removeAll();
 
         JPanel custDiff = new JPanel();
+        frame.setBackground(c);
+        custDiff.setBackground(c);
 
         // Selects size of board
         JPanel siz = new JPanel();
         JTextArea a = new JTextArea("Please select board size");
+        a.setFont(new Font(a.getFont().getFontName(), a.getFont().getStyle(), 30));
         siz.add(a);
 
         JSlider sizeSlide = new JSlider(5, 40);
         JTextArea sizeNum = new JTextArea(String.valueOf(sizeSlide.getValue()));
+        sizeNum.setFont(new Font(sizeNum.getFont().getFontName(), sizeNum.getFont().getStyle(), 30));
         sizeSlide.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -594,10 +597,12 @@ public class GameBoardGUI extends JFrame {
         // Selects chance of bomb
         JPanel dif = new JPanel();
         JTextArea d = new JTextArea("Please select chance of tile being bomb");
+        d.setFont(new Font(d.getFont().getFontName(), d.getFont().getStyle(), 30));
         dif.add(d);
 
         JSlider diffSlide = new JSlider(5, 80);
         JTextArea diffNum = new JTextArea(String.valueOf(diffSlide.getValue()));
+        diffNum.setFont(new Font(diffNum.getFont().getFontName(), diffNum.getFont().getStyle(), 30));
         diffSlide.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
