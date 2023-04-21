@@ -44,6 +44,10 @@ public class GameBoardGUI extends JFrame {
 
     Color c;
 
+    Timer timer;
+    int move;
+    int time;
+
     public GameBoardGUI () {
 
         cont = true;
@@ -69,6 +73,7 @@ public class GameBoardGUI extends JFrame {
         frame.getContentPane().removeAll();
 
         cont = true;
+        timer = new Timer(1000, incrementTime);
 
         board = new GameTile[size][size];
         buttons = new JButton[size][size];
@@ -125,6 +130,11 @@ public class GameBoardGUI extends JFrame {
         JTextField num = new JTextField("Flags Remaining: " + flagsRemaining);
         num.setEditable(false);
         title.add(num, BorderLayout.WEST);
+
+        JTextField timeArea = new JTextField("Time: " + time);
+        timeArea.setPreferredSize(new Dimension(60, 20));
+        timeArea.setEditable(false);
+        title.add(timeArea, BorderLayout.WEST);
 
         //functionally calling game to start?
         frame.add(grid, BorderLayout.CENTER);
@@ -186,6 +196,8 @@ public class GameBoardGUI extends JFrame {
         Random rand = new Random();
         GameTile temp;
         bombs = 0;
+        move = 0;
+        time = 0;
 
         for (int i = 0; i < size; i++) {
 
@@ -239,6 +251,17 @@ public class GameBoardGUI extends JFrame {
         return count;
     }
 
+
+    private ActionListener incrementTime = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //@TODO
+            time++;
+            JTextField tmp = (JTextField) title.getComponent(2);
+            tmp.setText("Time: " + time);
+        }
+    };
+
     /**
      * Makes the desired move on tile,
      * @param click which move to be made, flag or reveal
@@ -248,6 +271,10 @@ public class GameBoardGUI extends JFrame {
     public void makeMove(String click, int x, int y) {
 
         System.out.println("Made move: " + click + " at " + x + ", " + y);
+
+        if (move == 0) {
+            timer.start();
+        }
 
         if (click.equals("left")) {
 
@@ -272,7 +299,7 @@ public class GameBoardGUI extends JFrame {
                 flagsRemaining++;
             }
         }
-
+        move ++;
         guiUpdate();
 
     }
