@@ -56,7 +56,7 @@ public class GameBoardGUI extends JFrame {
 
         frame = new JFrame();
 
-        frame.setSize(900, 900);
+        frame.setSize(1000, 1000);
         frame.setLayout(new BorderLayout());
 
         frame.setLocationRelativeTo(null);
@@ -87,7 +87,7 @@ public class GameBoardGUI extends JFrame {
         giveUp = new JButton();
         giveUp.setText("Give Up");
 
-        frame.setSize(900, 900);
+        frame.setSize(1000, 1000);
         frame.setLayout(new BorderLayout());
         frame.add(title, BorderLayout.NORTH);
         frame.add(buttonPanel, BorderLayout.SOUTH);
@@ -135,6 +135,11 @@ public class GameBoardGUI extends JFrame {
         timeArea.setPreferredSize(new Dimension(60, 20));
         timeArea.setEditable(false);
         title.add(timeArea, BorderLayout.WEST);
+
+        JTextField moves = new JTextField("Moves: " + move);
+        moves.setPreferredSize(new Dimension(60, 20));
+        moves.setEditable(false);
+        title.add(moves, BorderLayout.WEST);
 
         //functionally calling game to start?
         frame.add(grid, BorderLayout.CENTER);
@@ -255,7 +260,6 @@ public class GameBoardGUI extends JFrame {
     private ActionListener incrementTime = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            //@TODO
             time++;
             JTextField tmp = (JTextField) title.getComponent(2);
             tmp.setText("Time: " + time);
@@ -274,6 +278,10 @@ public class GameBoardGUI extends JFrame {
 
         if (move == 0) {
             timer.start();
+        }
+
+        if (click.equals("left") && board[x][y].getIsRevealed()) {
+            return;
         }
 
         if (click.equals("left")) {
@@ -320,6 +328,9 @@ public class GameBoardGUI extends JFrame {
         JTextField tmp = (JTextField) title.getComponent(1);
         tmp.setText("Flags Remaining: " + flagsRemaining);
 
+        tmp = (JTextField) title.getComponent(3);
+        tmp.setText("Moves: " + move);
+
         System.out.println("made it here");
 
         for (int i = 0; i < size; i++) {
@@ -330,7 +341,11 @@ public class GameBoardGUI extends JFrame {
                     int num = board[i][j].getAround();
                     buttons[i][j].setText(String.valueOf(num));
                     buttons[i][j].setBackground(new Color(78,78,78));
-                    buttons[i][j].setFont(new Font(buttons[i][j].getFont().getFontName(), buttons[i][j].getFont().getStyle(), 30));
+                    buttons[i][j].setFont(new Font(buttons[i][j].getFont().getFontName(), buttons[i][j].getFont().getStyle(), 20));
+
+                    if (num == 0) {
+                        buttons[i][j].setText("");
+                    }
 
                     if (num == 1) {
                         buttons[i][j].setForeground(Color.blue);
@@ -420,6 +435,8 @@ public class GameBoardGUI extends JFrame {
 
         frame.getContentPane().removeAll();
 
+        timer.stop();
+
         JPanel j = new JPanel();
         j.setBackground(c);
 
@@ -452,6 +469,7 @@ public class GameBoardGUI extends JFrame {
 
         JButton againY = new JButton("Yes");
         JButton againN = new JButton("No");
+        JButton repeat = new JButton("Same Difficulty");
 
         againY.addActionListener(new ActionListener() {
             @Override
@@ -463,6 +481,12 @@ public class GameBoardGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
+            }
+        });
+        repeat.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                genGame();
             }
         });
 
@@ -477,6 +501,7 @@ public class GameBoardGUI extends JFrame {
         again.add(b);
         again.add(againY, BorderLayout.WEST);
         again.add(againN, BorderLayout.EAST);
+        again.add(repeat, BorderLayout.EAST);
 
         frame.add(again, BorderLayout.CENTER);
 
@@ -607,7 +632,7 @@ public class GameBoardGUI extends JFrame {
         a.setFont(new Font(a.getFont().getFontName(), a.getFont().getStyle(), 30));
         siz.add(a);
 
-        JSlider sizeSlide = new JSlider(5, 40);
+        JSlider sizeSlide = new JSlider(5, 50);
         JTextArea sizeNum = new JTextArea(String.valueOf(sizeSlide.getValue()));
         sizeNum.setFont(new Font(sizeNum.getFont().getFontName(), sizeNum.getFont().getStyle(), 30));
         sizeSlide.addChangeListener(new ChangeListener() {
