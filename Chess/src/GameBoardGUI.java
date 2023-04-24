@@ -50,6 +50,7 @@ public class GameBoardGUI {
         buttons = new JButton[size][size];
 
         grid = new Container();
+        grid.setLayout(new GridLayout(size, size));
 
         fillBoard();
         printBoard();
@@ -58,18 +59,29 @@ public class GameBoardGUI {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 //TODO change this to show gamepiece with icon
-                if (buttons[i][j] == null) {
+                if (board[i][j].getPiece().equals("null")) {
                     buttons[i][j] = new JButton();
                 } else {
                     buttons[i][j] = new JButton(board[i][j].getPiece());
+                    buttons[i][j].setForeground(Color.black);
+                    buttons[i][j].setFont(new Font(buttons[i][j].getFont().getFontName(), buttons[i][j].getFont().getStyle(), 20));
                 }
                 buttons[i][j].setBorder(new LineBorder(Color.BLACK));
                 buttons[i][j].addMouseListener(new MouseClickListener(i, j));
                 grid.add(buttons[i][j]);
+
+                if ((i + j) % 2 == 0) {
+                    buttons[i][j].setBackground(Color.WHITE);
+                } else {
+                    buttons[i][j].setBackground(new Color(140, 140, 140));
+                }
+
             }
         }
 
         frame.add(grid, BorderLayout.CENTER);
+
+        frame.setResizable(false);
 
         frame.revalidate();
         frame.repaint();
@@ -132,6 +144,12 @@ public class GameBoardGUI {
         board[7][7] = new GamePiece("rook", "white");
         for (int i = 0; i < size; i++) {
             board[6][i] = new GamePiece("pawn", "white");
+        }
+
+        for (int i = 2; i < 6; i++) {
+            for (int j = 0; j < size; j++) {
+                board[i][j] = new GamePiece("", "");
+            }
         }
     }
 

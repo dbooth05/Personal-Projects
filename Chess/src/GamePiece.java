@@ -7,15 +7,21 @@ import java.lang.ref.SoftReference;
 
 public class GamePiece {
 
-    private String piece;
+    private String piece = "";
     private Color color;
 
     public GamePiece(String piece, String color) {
-        this.piece = piece;
+        if (piece != "") {
+            this.piece = piece;
+        } else {
+            this.piece = "null";
+        }
         if (color.equals("black")) {
             this.color = new Color(0, 0, 0);
-        } else {
+        } else if (color.equals("white")){
             this.color = new Color(255, 255, 255);
+        } else {
+            color = null;
         }
     }
 
@@ -23,6 +29,10 @@ public class GamePiece {
         return  color;
     }
 
+    /**
+     * Method to return piece type
+     * @return the type of game piece
+     */
     public String getPiece() {
         return piece;
     }
