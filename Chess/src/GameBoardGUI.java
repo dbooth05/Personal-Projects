@@ -10,11 +10,17 @@ import java.awt.event.MouseListener;
 
 public class GameBoardGUI {
 
-    private GamePiece[][] board;
-    private final int size = 8;
+    private static GamePiece[][] board;
+    private static final int size = 8;
     private JFrame frame;
-    private JButton[][] buttons;
+    private static JButton[][] buttons;
     private Container grid;
+
+    static boolean turn;
+
+    private static final Color black = new Color(0, 0, 0);
+    private static final Color white = new Color(255,255, 255);
+    private static final Color highlight = new Color(255, 243, 115);
 
     public GameBoardGUI() {
         frame = new JFrame();
@@ -63,15 +69,19 @@ public class GameBoardGUI {
                     buttons[i][j] = new JButton();
                 } else {
                     buttons[i][j] = new JButton(board[i][j].getPiece());
-                    buttons[i][j].setForeground(Color.black);
                     buttons[i][j].setFont(new Font(buttons[i][j].getFont().getFontName(), buttons[i][j].getFont().getStyle(), 20));
+                }
+
+                Color tmp = board[i][j].getColor();
+                if (tmp != null) {
+                    buttons[i][j].setForeground(tmp);
                 }
                 buttons[i][j].setBorder(new LineBorder(Color.BLACK));
                 buttons[i][j].addMouseListener(new MouseClickListener(i, j));
                 grid.add(buttons[i][j]);
 
                 if ((i + j) % 2 == 0) {
-                    buttons[i][j].setBackground(Color.WHITE);
+                    buttons[i][j].setBackground(new Color(85, 85, 85));
                 } else {
                     buttons[i][j].setBackground(new Color(140, 140, 140));
                 }
@@ -98,7 +108,10 @@ public class GameBoardGUI {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-
+            selectPiece(x, y);
+            if (buttons[x][y].isSelected()) {
+                board[x][y].select();
+            }
         }
 
         @Override
@@ -151,6 +164,8 @@ public class GameBoardGUI {
                 board[i][j] = new GamePiece("", "");
             }
         }
+
+        turn = true;
     }
 
     private void printBoard() {
@@ -165,6 +180,78 @@ public class GameBoardGUI {
                 }
             }
             System.out.println(row);
+        }
+    }
+
+    /**
+     * Private method that refreshes the board after each move
+     * @TODO work on this method
+     */
+    private void guiUpdate() {
+
+    }
+
+    /**
+     * Private method for handling player making moves
+     * @TODO work on this method
+     */
+    private void makeMove() {
+
+    }
+
+    /**
+     * Private method for selecting piece, show available moves
+     * TODO do this method
+     */
+    private static void selectPiece(int x, int y) {
+        if (board[x][y].getPiece().equals("null")) {
+            return;
+        } else if ((board[x][y].getColor().getRGB() == white.getRGB() && !turn) || (board[x][y].getColor().getRGB() == black.getRGB() && turn)) {
+            return;
+        } else if (board[x][y].isSelected) {
+            reActivate();
+        } else {
+
+            System.out.println("x = " + x + " y = " + y + " Piece: " + board[x][y].getPiece());
+            String tmp = board[x][y].getPiece();
+            if (tmp.equals("pawn")) {
+                if (turn) {
+                    board[x][y].select();
+                    deActivate();
+                    buttons[x][y].setEnabled(true);
+                    if (board[x][y].isStartingPos()) {
+                        buttons[x-2][y].setBackground(highlight);
+                        buttons[x-1][y].setBackground(highlight);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * TODO make method to prevent clicking of other buttons when a piece is selected
+     * JBUTTON.setEnabled(false);
+     */
+    private static void deActivate() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                buttons[i][j].setEnabled(false);
+            }
+        }
+    }
+
+    private static void reActivate() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                buttons[i][j].setEnabled(true);
+
+                if ((i + j) % 2 == 0) {
+                    buttons[i][j].setBackground(new Color(85, 85, 85));
+                } else {
+                    buttons[i][j].setBackground(new Color(140, 140, 140));
+                }
+
+            }
         }
     }
 

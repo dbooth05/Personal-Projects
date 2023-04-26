@@ -9,6 +9,8 @@ public class GamePiece {
 
     private String piece = "";
     private Color color;
+    boolean isStartPos;
+    boolean isSelected;
 
     public GamePiece(String piece, String color) {
         if (piece != "") {
@@ -23,6 +25,8 @@ public class GamePiece {
         } else {
             color = null;
         }
+        isStartPos = true;
+        isSelected = false;
     }
 
     public Color getColor() {
@@ -35,6 +39,20 @@ public class GamePiece {
      */
     public String getPiece() {
         return piece;
+    }
+
+    public boolean isStartingPos() {
+        return isStartPos;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+    public void setNotStartPos() {
+        isStartPos = false;
+    }
+    public void select() {
+        isSelected = !isSelected;
     }
 
 }
