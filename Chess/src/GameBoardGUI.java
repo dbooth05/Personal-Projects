@@ -12,7 +12,7 @@ public class GameBoardGUI {
 
     private static GamePiece[][] board;
     private static final int size = 8;
-    private JFrame frame;
+    private static JFrame frame;
     private static JButton[][] buttons;
     private Container grid;
 
@@ -21,6 +21,8 @@ public class GameBoardGUI {
     private static final Color black = new Color(0, 0, 0);
     private static final Color white = new Color(255,255, 255);
     private static final Color highlight = new Color(255, 243, 115);
+
+    static GamePiece selected;
 
     public GameBoardGUI() {
         frame = new JFrame();
@@ -69,7 +71,6 @@ public class GameBoardGUI {
                     buttons[i][j] = new JButton();
                 } else {
                     buttons[i][j] = new JButton(board[i][j].getPiece());
-                    buttons[i][j].setFont(new Font(buttons[i][j].getFont().getFontName(), buttons[i][j].getFont().getStyle(), 20));
                 }
 
                 Color tmp = board[i][j].getColor();
@@ -78,6 +79,8 @@ public class GameBoardGUI {
                 }
                 buttons[i][j].setBorder(new LineBorder(Color.BLACK));
                 buttons[i][j].addMouseListener(new MouseClickListener(i, j));
+                buttons[i][j].setFont(new Font(buttons[i][j].getFont().getFontName(), buttons[i][j].getFont().getStyle(), 20));
+
                 grid.add(buttons[i][j]);
 
                 if ((i + j) % 2 == 0) {
@@ -109,7 +112,11 @@ public class GameBoardGUI {
         @Override
         public void mouseClicked(MouseEvent e) {
             selectPiece(x, y);
-            if (buttons[x][y].isSelected()) {
+            if (board[x][y].isSelected()) {
+                board[x][y].select();
+            } else if (selected != null) {
+                makeMove(selected.getX(), selected.getY(), x, y);
+                selected = null;
                 board[x][y].select();
             }
         }
@@ -136,32 +143,32 @@ public class GameBoardGUI {
     }
 
     private void fillBoard() {
-        board[0][0] = new GamePiece("rook", "black");
-        board[0][1] = new GamePiece("knight", "black");
-        board[0][2] = new GamePiece("bishop", "black");
-        board[0][3] = new GamePiece("queen", "black");
-        board[0][4] = new GamePiece("king", "black");
-        board[0][5] = new GamePiece("bishop", "black");
-        board[0][6] = new GamePiece("knight", "black");
-        board[0][7] = new GamePiece("rook", "black");
+        board[0][0] = new GamePiece("rook", "black", 0, 0);
+        board[0][1] = new GamePiece("knight", "black", 0, 1);
+        board[0][2] = new GamePiece("bishop", "black", 0, 2);
+        board[0][3] = new GamePiece("queen", "black", 0, 3);
+        board[0][4] = new GamePiece("king", "black", 0, 4);
+        board[0][5] = new GamePiece("bishop", "black", 0, 5);
+        board[0][6] = new GamePiece("knight", "black", 0, 6);
+        board[0][7] = new GamePiece("rook", "black", 0, 7);
         for (int i = 0; i < size; i++) {
-            board[1][i] = new GamePiece("pawn", "black");
+            board[1][i] = new GamePiece("pawn", "black", 1, i);
         }
-        board[7][0] = new GamePiece("rook", "white");
-        board[7][1] = new GamePiece("knight", "white");
-        board[7][2] = new GamePiece("bishop", "white");
-        board[7][3] = new GamePiece("queen", "white");
-        board[7][4] = new GamePiece("king", "white");
-        board[7][5] = new GamePiece("bishop", "white");
-        board[7][6] = new GamePiece("knight", "white");
-        board[7][7] = new GamePiece("rook", "white");
+        board[7][0] = new GamePiece("rook", "white", 7, 0);
+        board[7][1] = new GamePiece("knight", "white", 7, 1);
+        board[7][2] = new GamePiece("bishop", "white", 7, 2);
+        board[7][3] = new GamePiece("queen", "white", 7, 3);
+        board[7][4] = new GamePiece("king", "white", 7, 4);
+        board[7][5] = new GamePiece("bishop", "white", 7, 5);
+        board[7][6] = new GamePiece("knight", "white", 7, 6);
+        board[7][7] = new GamePiece("rook", "white", 7, 7);
         for (int i = 0; i < size; i++) {
-            board[6][i] = new GamePiece("pawn", "white");
+            board[6][i] = new GamePiece("pawn", "white", 6, i);
         }
 
         for (int i = 2; i < 6; i++) {
             for (int j = 0; j < size; j++) {
-                board[i][j] = new GamePiece("", "");
+                board[i][j] = new GamePiece("", "", i, j);
             }
         }
 
@@ -187,16 +194,31 @@ public class GameBoardGUI {
      * Private method that refreshes the board after each move
      * @TODO work on this method
      */
-    private void guiUpdate() {
+    private static void guiUpdate() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (!board[i][j].getPiece().equals("null")) {
+                    buttons[i][j].setText(board[i][j].getPiece());
+                } else {
+                    buttons[i][j].setText("");
+                }
+            }
+        }
 
+        frame.revalidate();
+        frame.repaint();
     }
 
     /**
      * Private method for handling player making moves
      * @TODO work on this method
      */
-    private void makeMove() {
-
+    private static void makeMove(int oldX, int oldY, int x, int y) {
+        GamePiece tmp = board[x][y];
+        board[x][y] = board[oldX][oldY];
+        board[oldX][oldY] = tmp;
+        selected = null;
+        guiUpdate();
     }
 
     /**
@@ -210,6 +232,8 @@ public class GameBoardGUI {
             return;
         } else if (board[x][y].isSelected) {
             reActivate();
+            board[x][y].select();
+            selected = null;
         } else {
 
             System.out.println("x = " + x + " y = " + y + " Piece: " + board[x][y].getPiece());
@@ -217,11 +241,15 @@ public class GameBoardGUI {
             if (tmp.equals("pawn")) {
                 if (turn) {
                     board[x][y].select();
+                    selected = board[x][y];
+                    System.out.println("x=" + selected.getX() + " y=" + selected.getY());
                     deActivate();
                     buttons[x][y].setEnabled(true);
                     if (board[x][y].isStartingPos()) {
                         buttons[x-2][y].setBackground(highlight);
+                        buttons[x-2][y].setEnabled(true);
                         buttons[x-1][y].setBackground(highlight);
+                        buttons[x-1][y].setEnabled(true);
                     }
                 }
             }

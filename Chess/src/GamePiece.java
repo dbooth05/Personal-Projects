@@ -12,7 +12,10 @@ public class GamePiece {
     boolean isStartPos;
     boolean isSelected;
 
-    public GamePiece(String piece, String color) {
+    int x;
+    int y;
+
+    public GamePiece(String piece, String color, int x, int y) {
         if (piece != "") {
             this.piece = piece;
         } else {
@@ -27,6 +30,9 @@ public class GamePiece {
         }
         isStartPos = true;
         isSelected = false;
+
+        this.x = x;
+        this.y = y;
     }
 
     public Color getColor() {
@@ -39,6 +45,14 @@ public class GamePiece {
      */
     public String getPiece() {
         return piece;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public boolean isStartingPos() {
