@@ -272,7 +272,19 @@ public class GameBoardGUI {
                         buttons[x-1][y].setEnabled(true);
                     }
                 } else {
-
+                    if (board[x][y].isStartingPos()) {
+                        deActivate();
+                        buttons[x][y].setEnabled(true);
+                        buttons[x+2][y].setBackground(highlight);
+                        buttons[x+2][y].setEnabled(true);
+                        buttons[x+1][y].setBackground(highlight);
+                        buttons[x+1][y].setEnabled(true);
+                    } else {
+                        deActivate();
+                        buttons[x][y].setEnabled(true);
+                        buttons[x+1][y].setBackground(highlight);
+                        buttons[x+1][y].setEnabled(true);
+                    }
                 }
                 break;
             case "rook":
@@ -280,6 +292,7 @@ public class GameBoardGUI {
             case "knight":
                 break;
         }
+        turn = !turn;
         guiUpdate();
     }
 
