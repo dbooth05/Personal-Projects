@@ -10,12 +10,9 @@ public class GamePiece {
     private String piece = "";
     private Color color;
     private boolean isStartPos;
-    private boolean isHighlighted;
+    private String colorString;
 
-    private int x;
-    private int y;
-
-    public GamePiece(String piece, String color, int x, int y) {
+    public GamePiece(String piece, String color) {
         if (piece != "") {
             this.piece = piece;
         } else {
@@ -29,10 +26,8 @@ public class GamePiece {
             color = null;
         }
         isStartPos = true;
-        isHighlighted = false;
+        colorString = color;
 
-        this.x = x;
-        this.y = y;
     }
 
     public Color getColor() {
@@ -47,14 +42,6 @@ public class GamePiece {
         return piece;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
     public boolean isStartingPos() {
         return isStartPos;
     }
@@ -62,12 +49,10 @@ public class GamePiece {
     public void setNotStartPos() {
         isStartPos = false;
     }
-    public boolean isHighlighted() {
-        return isHighlighted;
+
+    public String getColorString() {
+        return colorString;
     }
 
-    public void highlight() {
-        isHighlighted = !isHighlighted;
-    }
 
 }

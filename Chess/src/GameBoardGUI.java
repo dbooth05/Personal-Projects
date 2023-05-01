@@ -24,6 +24,9 @@ public class GameBoardGUI {
 
     static GamePiece selected;
 
+    private static int oX;
+    private static int oY;
+
     public GameBoardGUI() {
         frame = new JFrame();
 
@@ -114,7 +117,7 @@ public class GameBoardGUI {
             if (selected == null) {
                 selectPiece(x, y);
             } else {
-                makeMove(selected.getX(), selected.getY(), x, y);
+                makeMove(x, y);
             }
         }
 
@@ -140,32 +143,32 @@ public class GameBoardGUI {
     }
 
     private void fillBoard() {
-        board[0][0] = new GamePiece("rook", "black", 0, 0);
-        board[0][1] = new GamePiece("knight", "black", 0, 1);
-        board[0][2] = new GamePiece("bishop", "black", 0, 2);
-        board[0][3] = new GamePiece("queen", "black", 0, 3);
-        board[0][4] = new GamePiece("king", "black", 0, 4);
-        board[0][5] = new GamePiece("bishop", "black", 0, 5);
-        board[0][6] = new GamePiece("knight", "black", 0, 6);
-        board[0][7] = new GamePiece("rook", "black", 0, 7);
+        board[0][0] = new GamePiece("rook", "black");
+        board[0][1] = new GamePiece("knight", "black");
+        board[0][2] = new GamePiece("bishop", "black");
+        board[0][3] = new GamePiece("queen", "black");
+        board[0][4] = new GamePiece("king", "black");
+        board[0][5] = new GamePiece("bishop", "black");
+        board[0][6] = new GamePiece("knight", "black");
+        board[0][7] = new GamePiece("rook", "black");
         for (int i = 0; i < size; i++) {
-            board[1][i] = new GamePiece("pawn", "black", 1, i);
+            board[1][i] = new GamePiece("pawn", "black");
         }
-        board[7][0] = new GamePiece("rook", "white", 7, 0);
-        board[7][1] = new GamePiece("knight", "white", 7, 1);
-        board[7][2] = new GamePiece("bishop", "white", 7, 2);
-        board[7][3] = new GamePiece("queen", "white", 7, 3);
-        board[7][4] = new GamePiece("king", "white", 7, 4);
-        board[7][5] = new GamePiece("bishop", "white", 7, 5);
-        board[7][6] = new GamePiece("knight", "white", 7, 6);
-        board[7][7] = new GamePiece("rook", "white", 7, 7);
+        board[7][0] = new GamePiece("rook", "white");
+        board[7][1] = new GamePiece("knight", "white");
+        board[7][2] = new GamePiece("bishop", "white");
+        board[7][3] = new GamePiece("queen", "white");
+        board[7][4] = new GamePiece("king", "white");
+        board[7][5] = new GamePiece("bishop", "white");
+        board[7][6] = new GamePiece("knight", "white");
+        board[7][7] = new GamePiece("rook", "white");
         for (int i = 0; i < size; i++) {
-            board[6][i] = new GamePiece("pawn", "white", 6, i);
+            board[6][i] = new GamePiece("pawn", "white");
         }
 
         for (int i = 2; i < 6; i++) {
             for (int j = 0; j < size; j++) {
-                board[i][j] = new GamePiece("", "", i, j);
+                board[i][j] = new GamePiece("", "");
             }
         }
 
@@ -196,6 +199,11 @@ public class GameBoardGUI {
             for (int j = 0; j < size; j++) {
                 if (!board[i][j].getPiece().equals("null")) {
                     buttons[i][j].setText(board[i][j].getPiece());
+                    if(board[i][j].getColor().getRGB() == white.getRGB()) {
+                        buttons[i][j].setForeground(white);
+                    } else {
+                        buttons[i][j].setForeground(black);
+                    }
                 } else {
                     buttons[i][j].setText("");
                 }
@@ -212,11 +220,15 @@ public class GameBoardGUI {
      * Private method for handling player making moves
      * @TODO work on this method
      */
-    private static void makeMove(int oldX, int oldY, int x, int y) {
+    private static void makeMove(int x, int y) {
 
         GamePiece tmp = board[x][y];
-        board[x][y] = selected;
-        board[oldX][oldY] = tmp;
+        board[x][y] = board[oX][oY];
+        board[oX][oY] = tmp;
+
+        if (board[x][y].isStartingPos()) {
+            board[x][y].setNotStartPos();
+        }
 
         selected = null;
         reActivate();
@@ -237,24 +249,25 @@ public class GameBoardGUI {
             return;
         } else if ((board[x][y].getColor().getRGB() == white.getRGB() && !turn) || (board[x][y].getColor().getRGB() == black.getRGB() && turn)) {
             return;
-        }
-//        else if (selected == null) {
-//            return;
-//        }
-        else {
+        } else {
             selected = board[x][y];
+            oX = x;
+            oY = y;
         }
 
         switch (selected.getPiece()) {
             case "pawn":
                 if (turn) {
-                    if (board[x][y].isHighlighted()) {
-                        makeMove(selected.getX(), selected.getY(), x, y);
-                    } else {
+                    if (board[x][y].isStartingPos()) {
                         deActivate();
                         buttons[x][y].setEnabled(true);
                         buttons[x-2][y].setBackground(highlight);
                         buttons[x-2][y].setEnabled(true);
+                        buttons[x-1][y].setBackground(highlight);
+                        buttons[x-1][y].setEnabled(true);
+                    } else {
+                        deActivate();
+                        buttons[x][y].setEnabled(true);
                         buttons[x-1][y].setBackground(highlight);
                         buttons[x-1][y].setEnabled(true);
                     }
