@@ -9,11 +9,11 @@ public class GamePiece {
 
     private String piece = "";
     private Color color;
-    boolean isStartPos;
-    boolean isSelected;
+    private boolean isStartPos;
+    private boolean isHighlighted;
 
-    int x;
-    int y;
+    private int x;
+    private int y;
 
     public GamePiece(String piece, String color, int x, int y) {
         if (piece != "") {
@@ -29,7 +29,7 @@ public class GamePiece {
             color = null;
         }
         isStartPos = true;
-        isSelected = false;
+        isHighlighted = false;
 
         this.x = x;
         this.y = y;
@@ -59,14 +59,15 @@ public class GamePiece {
         return isStartPos;
     }
 
-    public boolean isSelected() {
-        return isSelected;
-    }
     public void setNotStartPos() {
         isStartPos = false;
     }
-    public void select() {
-        isSelected = !isSelected;
+    public boolean isHighlighted() {
+        return isHighlighted;
+    }
+
+    public void highlight() {
+        isHighlighted = !isHighlighted;
     }
 
 }

@@ -111,13 +111,10 @@ public class GameBoardGUI {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            selectPiece(x, y);
-            if (board[x][y].isSelected()) {
-                board[x][y].select();
-            } else if (selected != null) {
+            if (selected == null) {
+                selectPiece(x, y);
+            } else {
                 makeMove(selected.getX(), selected.getY(), x, y);
-                selected = null;
-                board[x][y].select();
             }
         }
 
@@ -175,7 +172,7 @@ public class GameBoardGUI {
         turn = true;
     }
 
-    private void printBoard() {
+    private static void printBoard() {
         for (int i = 0; i < size; i++) {
             String row = "";
             for (int j = 0; j < size; j++) {
@@ -207,6 +204,8 @@ public class GameBoardGUI {
 
         frame.revalidate();
         frame.repaint();
+        System.out.println("\n\n");
+        printBoard();
     }
 
     /**
@@ -214,11 +213,15 @@ public class GameBoardGUI {
      * @TODO work on this method
      */
     private static void makeMove(int oldX, int oldY, int x, int y) {
+
         GamePiece tmp = board[x][y];
-        board[x][y] = board[oldX][oldY];
+        board[x][y] = selected;
         board[oldX][oldY] = tmp;
+
         selected = null;
+        reActivate();
         guiUpdate();
+
     }
 
     /**
@@ -226,34 +229,45 @@ public class GameBoardGUI {
      * TODO do this method
      */
     private static void selectPiece(int x, int y) {
-        if (board[x][y].getPiece().equals("null")) {
+
+        if (selected == board[x][y]) {
+            reActivate();
+            return;
+        } else if (board[x][y].getPiece().equals("null")) {
             return;
         } else if ((board[x][y].getColor().getRGB() == white.getRGB() && !turn) || (board[x][y].getColor().getRGB() == black.getRGB() && turn)) {
             return;
-        } else if (board[x][y].isSelected) {
-            reActivate();
-            board[x][y].select();
-            selected = null;
-        } else {
+        }
+//        else if (selected == null) {
+//            return;
+//        }
+        else {
+            selected = board[x][y];
+        }
 
-            System.out.println("x = " + x + " y = " + y + " Piece: " + board[x][y].getPiece());
-            String tmp = board[x][y].getPiece();
-            if (tmp.equals("pawn")) {
+        switch (selected.getPiece()) {
+            case "pawn":
                 if (turn) {
-                    board[x][y].select();
-                    selected = board[x][y];
-                    System.out.println("x=" + selected.getX() + " y=" + selected.getY());
-                    deActivate();
-                    buttons[x][y].setEnabled(true);
-                    if (board[x][y].isStartingPos()) {
+                    if (board[x][y].isHighlighted()) {
+                        makeMove(selected.getX(), selected.getY(), x, y);
+                    } else {
+                        deActivate();
+                        buttons[x][y].setEnabled(true);
                         buttons[x-2][y].setBackground(highlight);
                         buttons[x-2][y].setEnabled(true);
                         buttons[x-1][y].setBackground(highlight);
                         buttons[x-1][y].setEnabled(true);
                     }
+                } else {
+
                 }
-            }
+                break;
+            case "rook":
+                break;
+            case "knight":
+                break;
         }
+        guiUpdate();
     }
 
     /**
