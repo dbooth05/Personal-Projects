@@ -105,8 +105,8 @@ public class GameBoardGUI {
 
     static class MouseClickListener implements MouseListener {
 
-        private int x;
-        private int y;
+        private final int x;
+        private final int y;
         public MouseClickListener (int x, int y) {
             this.x = x;
             this.y = y;
@@ -114,10 +114,14 @@ public class GameBoardGUI {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            if (selected == null) {
-                selectPiece(x, y);
-            } else {
-                makeMove(x, y);
+
+            JButton b = (JButton) e.getSource();
+            if (b.isEnabled()) {
+                if (selected == null) {
+                    selectPiece(x, y);
+                } else {
+                    makeMove(x, y);
+                }
             }
         }
 
@@ -218,20 +222,30 @@ public class GameBoardGUI {
 
     /**
      * Private method for handling player making moves
-     * @TODO work on this method
+     * TODO work on this method
      */
     private static void makeMove(int x, int y) {
 
-        GamePiece tmp = board[x][y];
-        board[x][y] = board[oX][oY];
-        board[oX][oY] = tmp;
 
-        if (board[x][y].isStartingPos()) {
-            board[x][y].setNotStartPos();
+        GamePiece tmp = board[x][y];
+
+        if (tmp.getPiece().equals("null")) {
+            board[x][y] = board[oX][oY];
+            board[oX][oY] = tmp;
+            selected = null;
+
+            if (board[x][y].isStartingPos()) {
+                board[x][y].setNotStartPos();
+            }
+
+            reActivate();
+            turn = !turn;
+
+        } else if (tmp.equals(selected)) {
+            reActivate();
+            selected = null;
         }
 
-        selected = null;
-        reActivate();
         guiUpdate();
 
     }
@@ -248,6 +262,9 @@ public class GameBoardGUI {
         } else if (board[x][y].getPiece().equals("null")) {
             return;
         } else if ((board[x][y].getColor().getRGB() == white.getRGB() && !turn) || (board[x][y].getColor().getRGB() == black.getRGB() && turn)) {
+            return;
+        } else if (selected != null && selected.equals(board[x][y])) {
+            reActivate();
             return;
         } else {
             selected = board[x][y];
@@ -268,8 +285,10 @@ public class GameBoardGUI {
                     } else {
                         deActivate();
                         buttons[x][y].setEnabled(true);
-                        buttons[x-1][y].setBackground(highlight);
-                        buttons[x-1][y].setEnabled(true);
+                        if (board[x-1][y].getPiece().equals("null")) {
+                            buttons[x-1][y].setBackground(highlight);
+                            buttons[x-1][y].setEnabled(true);
+                        }
                     }
                 } else {
                     if (board[x][y].isStartingPos()) {
@@ -282,8 +301,10 @@ public class GameBoardGUI {
                     } else {
                         deActivate();
                         buttons[x][y].setEnabled(true);
-                        buttons[x+1][y].setBackground(highlight);
-                        buttons[x+1][y].setEnabled(true);
+                        if (board[x+1][y].getPiece().equals("null")) {
+                            buttons[x+1][y].setBackground(highlight);
+                            buttons[x+1][y].setEnabled(true);
+                        }
                     }
                 }
                 break;
@@ -292,12 +313,10 @@ public class GameBoardGUI {
             case "knight":
                 break;
         }
-        turn = !turn;
         guiUpdate();
     }
 
     /**
-     * TODO make method to prevent clicking of other buttons when a piece is selected
      * JBUTTON.setEnabled(false);
      */
     private static void deActivate() {
@@ -321,6 +340,14 @@ public class GameBoardGUI {
 
             }
         }
+    }
+
+    /**
+     * TODO implement this method for all game piece types as their movement types are made
+     */
+    private static void checkAttack(String type) {
+
+
     }
 
 }

@@ -46,6 +46,11 @@ public class GamePiece {
         return isStartPos;
     }
 
+
+    public void equals() {
+
+    }
+
     public void setNotStartPos() {
         isStartPos = false;
     }
