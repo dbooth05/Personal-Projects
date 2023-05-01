@@ -103,7 +103,12 @@ public class GameBoardGUI {
         frame.repaint();
     }
 
-    static class MouseClickListener implements MouseListener {
+    /**
+     * Private class that implements MouseListener to listen for button
+     * input. Also, keeps the x,y coordinates of the button to used in
+     * comparison with the board (GamePiece[][] object)
+     */
+    private static class MouseClickListener implements MouseListener {
 
         private final int x;
         private final int y;
@@ -146,6 +151,10 @@ public class GameBoardGUI {
         }
     }
 
+    /**
+     * private method that fills the board with game pieces in
+     * correct positions.
+     */
     private void fillBoard() {
         board[0][0] = new GamePiece("rook", "black");
         board[0][1] = new GamePiece("knight", "black");
@@ -179,6 +188,11 @@ public class GameBoardGUI {
         turn = true;
     }
 
+    /**
+     * Private method to display game board in terminal,
+     * used to see game progression for debugging and finding
+     * issues related to gameplay
+     */
     private static void printBoard() {
         for (int i = 0; i < size; i++) {
             String row = "";
@@ -196,7 +210,6 @@ public class GameBoardGUI {
 
     /**
      * Private method that refreshes the board after each move
-     * @TODO work on this method
      */
     private static void guiUpdate() {
         for (int i = 0; i < size; i++) {
@@ -222,10 +235,11 @@ public class GameBoardGUI {
 
     /**
      * Private method for handling player making moves
+     * @param x the x coordinate of where the selected piece is moving to
+     * @param y the y coordinate of where the selected piece is moving to
      * TODO work on this method
      */
     private static void makeMove(int x, int y) {
-
 
         GamePiece tmp = board[x][y];
 
@@ -244,6 +258,13 @@ public class GameBoardGUI {
         } else if (tmp.equals(selected)) {
             reActivate();
             selected = null;
+        } else if (!tmp.getPiece().equals("null")) {
+            board[x][y] = board[oX][oY];
+            board[oX][oY] = new GamePiece("", "");
+
+            selected = null;
+            reActivate();
+            turn = !turn;
         }
 
         guiUpdate();
@@ -272,18 +293,18 @@ public class GameBoardGUI {
             oY = y;
         }
 
+        deActivate();
         switch (selected.getPiece()) {
             case "pawn":
                 if (turn) {
+                    checkAttackWhite(x, y);
                     if (board[x][y].isStartingPos()) {
-                        deActivate();
                         buttons[x][y].setEnabled(true);
                         buttons[x-2][y].setBackground(highlight);
                         buttons[x-2][y].setEnabled(true);
                         buttons[x-1][y].setBackground(highlight);
                         buttons[x-1][y].setEnabled(true);
                     } else {
-                        deActivate();
                         buttons[x][y].setEnabled(true);
                         if (board[x-1][y].getPiece().equals("null")) {
                             buttons[x-1][y].setBackground(highlight);
@@ -291,15 +312,14 @@ public class GameBoardGUI {
                         }
                     }
                 } else {
+                    checkAttackBlack(x, y);
                     if (board[x][y].isStartingPos()) {
-                        deActivate();
                         buttons[x][y].setEnabled(true);
                         buttons[x+2][y].setBackground(highlight);
                         buttons[x+2][y].setEnabled(true);
                         buttons[x+1][y].setBackground(highlight);
                         buttons[x+1][y].setEnabled(true);
                     } else {
-                        deActivate();
                         buttons[x][y].setEnabled(true);
                         if (board[x+1][y].getPiece().equals("null")) {
                             buttons[x+1][y].setBackground(highlight);
@@ -343,11 +363,59 @@ public class GameBoardGUI {
     }
 
     /**
-     * TODO implement this method for all game piece types as their movement types are made
+     * private method to check and highlight any space where a white pawn may attack if not part
+     * of general move direction
      */
-    private static void checkAttack(String type) {
+    private static void checkAttackWhite(int x, int y) {
 
+        if (y - 1 < 0) {
+            if (!board[x-1][y+1].getPiece().equals("null")) {
+                buttons[x-1][y+1].setEnabled(true);
+                buttons[x-1][y+1].setBackground(highlight);
+            }
+        } else if (y + 1 >= size) {
+            if (!board[x-1][y-1].getPiece().equals("null")) {
+                buttons[x-1][y-1].setEnabled(true);
+                buttons[x-1][y-1].setBackground(highlight);
+            }
+        } else {
+            if (!board[x - 1][y + 1].getPiece().equals("null")) {
+                buttons[x - 1][y + 1].setEnabled(true);
+                buttons[x - 1][y + 1].setBackground(highlight);
+            }
+            if (!board[x - 1][y - 1].getPiece().equals("null")) {
+                buttons[x - 1][y - 1].setEnabled(true);
+                buttons[x - 1][y - 1].setBackground(highlight);
+            }
+        }
 
     }
 
+    /**
+     * private method to check and highlight any space where a black pawn may attack if not part
+     * of general move direction
+     */
+    private static void checkAttackBlack(int x, int y) {
+
+        if (y - 1 < 0) {
+            if (!board[x + 1][y + 1].getPiece().equals("null")) {
+                buttons[x + 1][y + 1].setEnabled(true);
+                buttons[x + 1][y + 1].setBackground(highlight);
+            }
+        } else if (y + 1 >= size) {
+            if (!board[x + 1][y - 1].getPiece().equals("null")) {
+                buttons[x + 1][y - 1].setEnabled(true);
+                buttons[x + 1][y - 1].setBackground(highlight);
+            }
+        } else {
+            if (!board[x + 1][y + 1].getPiece().equals("null")) {
+                buttons[x + 1][y + 1].setEnabled(true);
+                buttons[x + 1][y + 1].setBackground(highlight);
+            }
+            if (!board[x + 1][y - 1].getPiece().equals("null")) {
+                buttons[x + 1][y - 1].setEnabled(true);
+                buttons[x + 1][y - 1].setBackground(highlight);
+            }
+        }
+    }
 }
