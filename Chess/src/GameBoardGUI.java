@@ -21,8 +21,6 @@ public class GameBoardGUI {
 
     static boolean turn; //Boolean value of the current player, true for white, false for black
 
-    private static final Color black = new Color(0, 0, 0); //TODO remove this and related things
-    private static final Color white = new Color(255,255, 255);  //TODO remove this and related things
     private static final Color highlight = new Color(255, 243, 115); //the highlighted color background
 
     private static GamePiece selected; //the selected game piece, used for highlighting possible moves
@@ -397,7 +395,7 @@ public class GameBoardGUI {
             return;
         } else if (board[x][y].getPiece().equals("null")) {
             return;
-        } else if ((board[x][y].getColor().getRGB() == white.getRGB() && !turn) || (board[x][y].getColor().getRGB() == black.getRGB() && turn)) {
+        } else if ((board[x][y].getColorString().equals("white") && !turn) || (board[x][y].getColorString().equals("black")&& turn)) {
             return;
         } else if (selected != null && selected.equals(board[x][y])) {
             reActivate();
@@ -565,7 +563,7 @@ public class GameBoardGUI {
      * @param y the Y coordinate of the piece needing to be given possible moves
      */
     private static void checkRookVert(int x, int y) {
-        if (board[x][y].getColor().getRGB() == white.getRGB()) {
+        if (board[x][y].getColorString().equals("white")) {
             int X = x + 1;
             while (X < size) {
                 if (!board[X][y].getPiece().equals("null")) {
@@ -627,7 +625,7 @@ public class GameBoardGUI {
      * @param y the Y coordinate of the piece needing to be given possible moves
      */
     private static void checkRookHori(int x, int y) {
-        if (board[x][y].getColor().getRGB() == white.getRGB()) {
+        if (board[x][y].getColorString().equals("white")) {
             int Y = y - 1;
             while (Y >= 0) {
                 if (!board[x][Y].getPiece().equals("null")) {
