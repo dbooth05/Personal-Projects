@@ -2,7 +2,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.color.ColorSpace;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -15,23 +14,26 @@ import java.io.IOException;
 
 public class GameBoardGUI {
 
-    private static GamePiece[][] board;
-    private static final int size = 8;
+    private static GamePiece[][] board; //2D array of GamePieces
+    private static final int size = 8; //size of the board, used in loops and conditionals
     private static JFrame frame;
     private static JButton[][] buttons;
-    private Container grid;
 
-    static boolean turn;
+    static boolean turn; //Boolean value of the current player, true for white, false for black
 
-    private static final Color black = new Color(0, 0, 0);
-    private static final Color white = new Color(255,255, 255);
-    private static final Color highlight = new Color(255, 243, 115);
+    private static final Color black = new Color(0, 0, 0); //TODO remove this and related things
+    private static final Color white = new Color(255,255, 255);  //TODO remove this and related things
+    private static final Color highlight = new Color(255, 243, 115); //the highlighted color background
 
-    static GamePiece selected;
+    private static GamePiece selected; //the selected game piece, used for highlighting possible moves
 
-    private static int oX;
-    private static int oY;
+    private static int oX; //holds the x coordinate of the selected piece
+    private static int oY; //holds the y coordinate of the selected piece
 
+    /**
+     * Constructor for building game screen. Creates JFrame and then calls playGame->genGame
+     * to display elements.
+     */
     public GameBoardGUI() {
         frame = new JFrame();
 
@@ -47,6 +49,9 @@ public class GameBoardGUI {
         playAgain();
     }
 
+    /**
+     * TODO implement this, allow replaying without starting and stopping application
+     */
     private void playAgain() {
 
         frame.getContentPane().removeAll();
@@ -58,6 +63,9 @@ public class GameBoardGUI {
 
     }
 
+    /**
+     * Method called to generate the chess board and all elements regarding gameplay
+     */
     private void genGame() {
 
         frame.getContentPane().removeAll();
@@ -65,7 +73,7 @@ public class GameBoardGUI {
         board = new GamePiece[size][size];
         buttons = new JButton[size][size];
 
-        grid = new Container();
+        Container grid = new Container();
         grid.setLayout(new GridLayout(size, size));
 
         fillBoard();
@@ -74,7 +82,6 @@ public class GameBoardGUI {
         //initialize buttons
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                //TODO change this to show game piece with icon
                 if (board[i][j].getPiece().equals("null")) {
                     buttons[i][j] = new JButton();
                 } else {
@@ -135,10 +142,6 @@ public class GameBoardGUI {
                     }
                 }
 
-                Color tmp = board[i][j].getColor();
-//                if (tmp != null) {
-//                    buttons[i][j].setForeground(tmp);
-//                }
                 buttons[i][j].setBorder(new LineBorder(Color.BLACK));
                 buttons[i][j].addMouseListener(new MouseClickListener(i, j));
                 buttons[i][j].setFont(new Font(buttons[i][j].getFont().getFontName(), buttons[i][j].getFont().getStyle(), 20));
