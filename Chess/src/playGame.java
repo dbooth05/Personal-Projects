@@ -4,7 +4,6 @@ public class playGame {
 
         GameBoardGUI g = new GameBoardGUI();
 
-
     }
 
 }

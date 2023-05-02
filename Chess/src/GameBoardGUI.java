@@ -1,8 +1,13 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.color.ColorSpace;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Dylan Booth
@@ -66,20 +71,74 @@ public class GameBoardGUI {
         fillBoard();
         printBoard();
 
-        //intiallize buttons
+        //initialize buttons
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                //TODO change this to show gamepiece with icon
+                //TODO change this to show game piece with icon
                 if (board[i][j].getPiece().equals("null")) {
                     buttons[i][j] = new JButton();
                 } else {
-                    buttons[i][j] = new JButton(board[i][j].getPiece());
+                    try {
+                        buttons[i][j] = new JButton();
+                        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_BYTE_GRAY);
+                        switch (board[i][j].getPiece()) {
+                            case "king":
+                                if (board[i][j].getColorString().equals("white")) {
+                                    img = ImageIO.read(new File("white-king.jpg"));
+                                } else {
+                                    img = ImageIO.read(new File("black-king.png"));
+                                }
+                                break;
+                            case "queen":
+                                if (board[i][j].getColorString().equals("white")) {
+                                    img = ImageIO.read(new File("white-queen.jpg"));
+                                } else {
+                                    img = ImageIO.read(new File("black-queen.png"));
+                                }
+                                break;
+                            case "rook":
+                                if (board[i][j].getColorString().equals("white")) {
+                                    img = ImageIO.read(new File("white-rook.jpg"));
+                                } else {
+                                    img = ImageIO.read(new File("black-rook.jpg"));
+                                }
+                                break;
+                            case "knight":
+                                if (board[i][j].getColorString().equals("white")) {
+                                    img = ImageIO.read(new File("white-knight.png"));
+                                } else {
+                                    img = ImageIO.read(new File("black-knight.jpg"));
+                                }
+                                break;
+                            case "bishop":
+                                if (board[i][j].getColorString().equals("white")) {
+                                    img = ImageIO.read(new File("white-bishop.jpg"));
+                                } else {
+                                    img = ImageIO.read(new File("black-bishop.jpg"));
+                                }
+                                break;
+                            case "pawn":
+                                if (board[i][j].getColorString().equals("white")) {
+                                    img = ImageIO.read(new File("white-pawn.jpg"));
+                                } else {
+                                    img = ImageIO.read(new File("black-pawn.jpg"));
+                                }
+                                break;
+                        }
+
+                        Image image = new ImageIcon(img).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                        Icon icon = new ImageIcon(image);
+                        buttons[i][j].setIcon(icon);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 Color tmp = board[i][j].getColor();
-                if (tmp != null) {
-                    buttons[i][j].setForeground(tmp);
-                }
+//                if (tmp != null) {
+//                    buttons[i][j].setForeground(tmp);
+//                }
                 buttons[i][j].setBorder(new LineBorder(Color.BLACK));
                 buttons[i][j].addMouseListener(new MouseClickListener(i, j));
                 buttons[i][j].setFont(new Font(buttons[i][j].getFont().getFontName(), buttons[i][j].getFont().getStyle(), 20));
@@ -237,7 +296,6 @@ public class GameBoardGUI {
      * Private method for handling player making moves
      * @param x the x coordinate of where the selected piece is moving to
      * @param y the y coordinate of where the selected piece is moving to
-     * TODO work on this method
      */
     private static void makeMove(int x, int y) {
 
