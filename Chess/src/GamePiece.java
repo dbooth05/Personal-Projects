@@ -23,7 +23,7 @@ public class GamePiece {
         } else if (color.equals("white")){
             this.color = new Color(255, 255, 255);
         } else {
-            color = null;
+            color = "";
         }
         isStartPos = true;
         colorString = color;
@@ -44,11 +44,6 @@ public class GamePiece {
 
     public boolean isStartingPos() {
         return isStartPos;
-    }
-
-
-    public void equals() {
-
     }
 
     public void setNotStartPos() {

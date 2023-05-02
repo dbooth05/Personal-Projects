@@ -330,7 +330,7 @@ public class GameBoardGUI {
                 break;
             case "rook":
                 checkRookVert(x, y);
-                checkRookHoriRec(x, y);
+                checkRookHori(x, y);
                 buttons[x][y].setEnabled(true);
                 break;
             case "knight":
@@ -340,8 +340,14 @@ public class GameBoardGUI {
                 buttons[x][y].setEnabled(true);
                 break;
             case "queen":
+                checkRookVert(x, y);
+                checkRookHori(x, y);
+                checkBishop(x, y);
+                buttons[x][y].setEnabled(true);
                 break;
             case "king":
+                checkKing(x, y);
+                buttons[x][y].setEnabled(true);
                 break;
         }
         guiUpdate();
@@ -503,7 +509,7 @@ public class GameBoardGUI {
      * @param x the X coordinate of the piece needing to be given possible moves
      * @param y the Y coordinate of the piece needing to be given possible moves
      */
-    private static void checkRookHoriRec(int x, int y) {
+    private static void checkRookHori(int x, int y) {
         if (board[x][y].getColor().getRGB() == white.getRGB()) {
             int Y = y - 1;
             while (Y >= 0) {
@@ -626,6 +632,39 @@ public class GameBoardGUI {
             buttons[X][Y].setBackground(highlight);
             X++;
             Y--;
+        }
+    }
+
+    /**
+     * Private method to check and highlight any space where king may move/attack
+     * @param x the X coordinate of position to be checked
+     * @param y the Y coordinate of position to be checked
+     */
+    private static void checkKing(int x, int y) {
+        if (x-1 >= 0 && y-1 >= 0 && !board[x-1][y-1].getColorString().equals(selected.getColorString())) {          //top left
+            buttons[x-1][y-1].setEnabled(true);
+            buttons[x-1][y-1].setBackground(highlight);
+        } if (x-1 >= 0 && y+1 < size && !board[x-1][y+1].getColorString().equals(selected.getColorString())) {      //top right
+            buttons[x-1][y+1].setEnabled(true);
+            buttons[x-1][y+1].setBackground(highlight);
+        } if (x-1 >= 0 && !board[x-1][y].getColorString().equals(selected.getColorString())) {                      //above
+            buttons[x-1][y].setEnabled(true);
+            buttons[x-1][y].setBackground(highlight);
+        } if (x+1 < size && y-1 >= 0 && !board[x+1][y-1].getColorString().equals(selected.getColorString())) {      //lower left
+            buttons[x+1][y-1].setEnabled(true);
+            buttons[x+1][y-1].setBackground(highlight);
+        } if (x+1 < size && y+1 < size && !board[x+1][y+1].getColorString().equals(selected.getColorString())) {    //lower right
+            buttons[x+1][y+1].setEnabled(true);
+            buttons[x+1][y+1].setBackground(highlight);
+        } if (x+1 < size && !board[x+1][y].getColorString().equals(selected.getColorString())) {                    //below
+            buttons[x+1][y].setEnabled(true);
+            buttons[x+1][y].setBackground(highlight);
+        } if (y+1 < size && !board[x][y+1].getColorString().equals(selected.getColorString())) {                    //right
+            buttons[x][y+1].setEnabled(true);
+            buttons[x][y+1].setBackground(highlight);
+        } if (y-1 >= 0 && !board[x][y-1].getColorString().equals(selected.getColorString())) {                      //left
+            buttons[x][y-1].setEnabled(true);
+            buttons[x][y-1].setBackground(highlight);
         }
     }
 }
