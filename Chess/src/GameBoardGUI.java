@@ -273,7 +273,8 @@ public class GameBoardGUI {
 
     /**
      * Private method for selecting piece, show available moves
-     * TODO do this method
+     * @param x the X coordinate of the piece to be selected and possible moves highlighted
+     * @param y the Y coordinate of the piece to be selected and possible moves highlighted
      */
     private static void selectPiece(int x, int y) {
 
@@ -334,6 +335,8 @@ public class GameBoardGUI {
                 buttons[x][y].setEnabled(true);
                 break;
             case "knight":
+                checkKnight(x, y);
+                buttons[x][y].setEnabled(true);
                 break;
             case "bishop":
                 checkBishop(x, y);
@@ -563,6 +566,63 @@ public class GameBoardGUI {
                 buttons[x][Y].setEnabled(true);
                 buttons[x][Y].setBackground(highlight);
                 Y++;
+            }
+        }
+    }
+
+    /**
+     * Private method to check and highligh any space where a knight may move/attack
+     * @param x the X coordinate of position to be checked
+     * @param y the Y coordinate of position to be checked
+     */
+    private static void checkKnight(int x, int y) {
+        if (y - 2 >= 0) {
+            if (x - 1 >= 0) {
+                if (!board[x - 1][y - 2].getColorString().equals(selected.getColorString())) {
+                    buttons[x - 1][y - 2].setEnabled(true);
+                    buttons[x - 1][y - 2].setBackground(highlight);
+                }
+            } if (x + 1 < size) {
+                if (!board[x + 1][y - 2].getColorString().equals(selected.getColorString())) {
+                    buttons[x + 1][y - 2].setEnabled(true);
+                    buttons[x + 1][y - 2].setBackground(highlight);
+                }
+            }
+        } if (y + 2 < size) {
+            if (x - 1 >= 0) {
+                if (!board[x-1][y+2].getColorString().equals(selected.getColorString())) {
+                    buttons[x - 1][y + 2].setEnabled(true);
+                    buttons[x - 1][y + 2].setBackground(highlight);
+                }
+            } if (x + 1 >= 0) {
+                if (!board[x + 1][y + 2].getColorString().equals(selected.getColorString())) {
+                    buttons[x + 1][y + 2].setEnabled(true);
+                    buttons[x + 1][y + 2].setBackground(highlight);
+                }
+            }
+        } if (x - 2 >= 0) {
+            if (y - 1 >= 0) {
+                if (!board[x - 2][y - 1].getColorString().equals(selected.getColorString())) {
+                    buttons[x - 2][y - 1].setEnabled(true);
+                    buttons[x - 2][y - 1].setBackground(highlight);
+                }
+            } if (y + 1 < size) {
+                if (!board[x - 2][y + 1].getColorString().equals(selected.getColorString())) {
+                    buttons[x - 2][y + 1].setEnabled(true);
+                    buttons[x - 2][y + 1].setBackground(highlight);
+                }
+            }
+        } if (x + 2 < size) {
+            if (y - 1 >= 0) {
+                if (!board[x + 2][y - 1].getColorString().equals(selected.getColorString())) {
+                    buttons[x + 2][y - 1].setEnabled(true);
+                    buttons[x + 2][y - 1].setBackground(highlight);
+                }
+            } if (y + 1 < size) {
+                if (!board[x+2][y+1].getColorString().equals(selected.getColorString())) {
+                    buttons[x+2][y+1].setEnabled(true);
+                    buttons[x+2][y+1].setBackground(highlight);
+                }
             }
         }
     }
