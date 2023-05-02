@@ -335,6 +335,14 @@ public class GameBoardGUI {
                 break;
             case "knight":
                 break;
+            case "bishop":
+                checkBishop(x, y);
+                buttons[x][y].setEnabled(true);
+                break;
+            case "queen":
+                break;
+            case "king":
+                break;
         }
         guiUpdate();
     }
@@ -553,5 +561,71 @@ public class GameBoardGUI {
         }
     }
 
-
+    /**
+     * Private method to check and highlight any space where a bishop may move/attack
+     * @param x the X coordinate of the position to check from
+     * @param y the Y coordinate of the position to check from
+     */
+    private static void checkBishop(int x, int y) {
+        int X = x - 1;
+        int Y = y - 1;
+        while (X >= 0 && Y >= 0) {
+            if (!board[X][Y].getPiece().equals("null")) {
+                if (!board[X][Y].getColorString().equals(selected.getColorString())) {
+                    buttons[X][Y].setEnabled(true);
+                    buttons[X][Y].setBackground(highlight);
+                }
+                break;
+            }
+            buttons[X][Y].setEnabled(true);
+            buttons[X][Y].setBackground(highlight);
+            X--;
+            Y--;
+        }
+        X = x + 1;
+        Y = y + 1;
+        while (X < size && Y < size) {
+            if (!board[X][Y].getPiece().equals("null")) {
+                if (!board[X][Y].getColorString().equals(selected.getColorString())) {
+                    buttons[X][Y].setEnabled(true);
+                    buttons[X][Y].setBackground(highlight);
+                }
+                break;
+            }
+            buttons[X][Y].setEnabled(true);
+            buttons[X][Y].setBackground(highlight);
+            X++;
+            Y++;
+        }
+        X = x - 1;
+        Y = y + 1;
+        while (X >= 0 && Y < size) {
+            if (!board[X][Y].getPiece().equals("null")) {
+                if (!board[X][Y].getColorString().equals(selected.getColorString())) {
+                    buttons[X][Y].setEnabled(true);
+                    buttons[X][Y].setBackground(highlight);
+                }
+                break;
+            }
+            buttons[X][Y].setEnabled(true);
+            buttons[X][Y].setBackground(highlight);
+            X--;
+            Y++;
+        }
+        X = x + 1;
+        Y = y - 1;
+        while (X < size && Y >= 0) {
+            if (!board[X][Y].getPiece().equals("null")) {
+                if (!board[X][Y].getColorString().equals(selected.getColorString())) {
+                    buttons[X][Y].setEnabled(true);
+                    buttons[X][Y].setBackground(highlight);
+                }
+                break;
+            }
+            buttons[X][Y].setEnabled(true);
+            buttons[X][Y].setBackground(highlight);
+            X++;
+            Y--;
+        }
+    }
 }
