@@ -297,7 +297,7 @@ public class GameBoardGUI {
         switch (selected.getPiece()) {
             case "pawn":
                 if (turn) {
-                    checkAttackWhite(x, y);
+                    checkPawnWhite(x, y);
                     if (board[x][y].isStartingPos()) {
                         buttons[x][y].setEnabled(true);
                         buttons[x-2][y].setBackground(highlight);
@@ -312,7 +312,7 @@ public class GameBoardGUI {
                         }
                     }
                 } else {
-                    checkAttackBlack(x, y);
+                    checkPawnBlack(x, y);
                     if (board[x][y].isStartingPos()) {
                         buttons[x][y].setEnabled(true);
                         buttons[x+2][y].setBackground(highlight);
@@ -329,6 +329,9 @@ public class GameBoardGUI {
                 }
                 break;
             case "rook":
+                checkRookVert(x, y);
+                checkRookHoriRec(x, y);
+                buttons[x][y].setEnabled(true);
                 break;
             case "knight":
                 break;
@@ -337,7 +340,9 @@ public class GameBoardGUI {
     }
 
     /**
-     * JBUTTON.setEnabled(false);
+     * Private method to deactivate all JButtons on the grid.
+     * Used for when a piece is selected to disable board,
+     * caller method will re-enable any button that needs to function
      */
     private static void deActivate() {
         for (int i = 0; i < size; i++) {
@@ -347,6 +352,10 @@ public class GameBoardGUI {
         }
     }
 
+    /**
+     * Private method that reactivates all JButtons on the grid.
+     * Called after a piece is deselected or a move is made.
+     */
     private static void reActivate() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -366,24 +375,24 @@ public class GameBoardGUI {
      * private method to check and highlight any space where a white pawn may attack if not part
      * of general move direction
      */
-    private static void checkAttackWhite(int x, int y) {
+    private static void checkPawnWhite(int x, int y) {
 
         if (y - 1 < 0) {
-            if (!board[x-1][y+1].getPiece().equals("null")) {
+            if (!board[x-1][y+1].getPiece().equals("null") && board[x-1][y+1].getColorString().equals("black")) {
                 buttons[x-1][y+1].setEnabled(true);
                 buttons[x-1][y+1].setBackground(highlight);
             }
         } else if (y + 1 >= size) {
-            if (!board[x-1][y-1].getPiece().equals("null")) {
+            if (!board[x-1][y-1].getPiece().equals("null") && board[x-1][y-1].getColorString().equals("black")) {
                 buttons[x-1][y-1].setEnabled(true);
                 buttons[x-1][y-1].setBackground(highlight);
             }
         } else {
-            if (!board[x - 1][y + 1].getPiece().equals("null")) {
+            if (!board[x - 1][y + 1].getPiece().equals("null") && board[x-1][y+1].getColorString().equals("black")) {
                 buttons[x - 1][y + 1].setEnabled(true);
                 buttons[x - 1][y + 1].setBackground(highlight);
             }
-            if (!board[x - 1][y - 1].getPiece().equals("null")) {
+            if (!board[x - 1][y - 1].getPiece().equals("null") && board[x-1][y-1].getColorString().equals("black")) {
                 buttons[x - 1][y - 1].setEnabled(true);
                 buttons[x - 1][y - 1].setBackground(highlight);
             }
@@ -395,27 +404,154 @@ public class GameBoardGUI {
      * private method to check and highlight any space where a black pawn may attack if not part
      * of general move direction
      */
-    private static void checkAttackBlack(int x, int y) {
+    private static void checkPawnBlack(int x, int y) {
 
         if (y - 1 < 0) {
-            if (!board[x + 1][y + 1].getPiece().equals("null")) {
+            if (!board[x + 1][y + 1].getPiece().equals("null") && board[x+1][y+1].getColorString().equals("white")) {
                 buttons[x + 1][y + 1].setEnabled(true);
                 buttons[x + 1][y + 1].setBackground(highlight);
             }
         } else if (y + 1 >= size) {
-            if (!board[x + 1][y - 1].getPiece().equals("null")) {
+            if (!board[x + 1][y - 1].getPiece().equals("null") && board[x+1][y-1].getColorString().equals("white")) {
                 buttons[x + 1][y - 1].setEnabled(true);
                 buttons[x + 1][y - 1].setBackground(highlight);
             }
         } else {
-            if (!board[x + 1][y + 1].getPiece().equals("null")) {
+            if (!board[x + 1][y + 1].getPiece().equals("null") && board[x+1][y+1].getColorString().equals("white")) {
                 buttons[x + 1][y + 1].setEnabled(true);
                 buttons[x + 1][y + 1].setBackground(highlight);
             }
-            if (!board[x + 1][y - 1].getPiece().equals("null")) {
+            if (!board[x + 1][y - 1].getPiece().equals("null") && board[x+1][y-1].getColorString().equals("white")) {
                 buttons[x + 1][y - 1].setEnabled(true);
                 buttons[x + 1][y - 1].setBackground(highlight);
             }
         }
     }
+
+    /**
+     * Private method to check and highlight any space where a rook may move/attack vertically
+     * @param x the X coordinate of the piece needing to be given possible moves
+     * @param y the Y coordinate of the piece needing to be given possible moves
+     */
+    private static void checkRookVert(int x, int y) {
+        if (board[x][y].getColor().getRGB() == white.getRGB()) {
+            int X = x + 1;
+            while (X < size) {
+                if (!board[X][y].getPiece().equals("null")) {
+                    if (board[X][y].getColorString().equals("black")) {
+                        buttons[X][y].setEnabled(true);
+                        buttons[X][y].setBackground(highlight);
+                    }
+                    break;
+                }
+                buttons[X][y].setEnabled(true);
+                buttons[X][y].setBackground(highlight);
+                X++;
+            }
+            X = x - 1;
+            while (X >= 0) {
+                if (!board[X][y].getPiece().equals("null")) {
+                    if (board[X][y].getColorString().equals("black")) {
+                        buttons[X][y].setEnabled(true);
+                        buttons[X][y].setBackground(highlight);
+                    }
+                    break;
+                }
+                buttons[X][y].setEnabled(true);
+                buttons[X][y].setBackground(highlight);
+                X--;
+            }
+        } else {
+            int X = x + 1;
+            while (X < size) {
+                if (!board[X][y].getPiece().equals("null")) {
+                    if (board[X][y].getColorString().equals("white")) {
+                        buttons[X][y].setEnabled(true);
+                        buttons[X][y].setBackground(highlight);
+                    }
+                    break;
+                }
+                buttons[X][y].setEnabled(true);
+                buttons[X][y].setBackground(highlight);
+                X++;
+            }
+            X = x - 1;
+            while (X >= 0) {
+                if (!board[X][y].getPiece().equals("null")) {
+                    if (board[X][y].getColorString().equals("white")) {
+                        buttons[X][y].setEnabled(true);
+                        buttons[X][y].setBackground(highlight);
+                    }
+                    break;
+                }
+                buttons[X][y].setEnabled(true);
+                buttons[X][y].setBackground(highlight);
+                X--;
+            }
+        }
+    }
+    /**
+     * Private method to check and highlight any space where a rook may move/attack horizontally
+     * @param x the X coordinate of the piece needing to be given possible moves
+     * @param y the Y coordinate of the piece needing to be given possible moves
+     */
+    private static void checkRookHoriRec(int x, int y) {
+        if (board[x][y].getColor().getRGB() == white.getRGB()) {
+            int Y = y - 1;
+            while (Y >= 0) {
+                if (!board[x][Y].getPiece().equals("null")) {
+                    if (board[x][Y].getColorString().equals("black")) {
+                        buttons[x][Y].setEnabled(true);
+                        buttons[x][Y].setBackground(highlight);
+                    }
+                    break;
+                }
+                buttons[x][Y].setEnabled(true);
+                buttons[x][Y].setBackground(highlight);
+                Y--;
+            }
+            Y = y + 1;
+            while (Y < size) {
+                if (!board[x][Y].getPiece().equals("null")) {
+                    if (board[x][Y].getColorString().equals("black")) {
+                        buttons[x][Y].setEnabled(true);
+                        buttons[x][Y].setBackground(highlight);
+                    }
+                    break;
+                }
+                buttons[x][Y].setEnabled(true);
+                buttons[x][Y].setBackground(highlight);
+                Y++;
+            }
+        } else {
+            int Y = y - 1;
+            while (Y >= 0) {
+                if (!board[x][Y].getPiece().equals("null")) {
+                    if (board[x][Y].getColorString().equals("white")) {
+                        buttons[x][Y].setEnabled(true);
+                        buttons[x][Y].setBackground(highlight);
+                    }
+                    break;
+                }
+                buttons[x][Y].setEnabled(true);
+                buttons[x][Y].setBackground(highlight);
+                Y--;
+            }
+            Y = y + 1;
+            while (Y < size) {
+                if (!board[x][Y].getPiece().equals("null")) {
+                    if (board[x][Y].getColorString().equals("white")) {
+                        buttons[x][Y].setEnabled(true);
+                        buttons[x][Y].setBackground(highlight);
+                    }
+                    break;
+                }
+                buttons[x][Y].setEnabled(true);
+                buttons[x][Y].setBackground(highlight);
+                Y++;
+            }
+        }
+    }
+
+
 }
