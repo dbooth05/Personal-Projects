@@ -277,14 +277,63 @@ public class GameBoardGUI {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (!board[i][j].getPiece().equals("null")) {
-                    buttons[i][j].setText(board[i][j].getPiece());
-                    if(board[i][j].getColor().getRGB() == white.getRGB()) {
-                        buttons[i][j].setForeground(white);
-                    } else {
-                        buttons[i][j].setForeground(black);
+                    BufferedImage img = null;
+                    try {
+                        img = new BufferedImage(1, 1, BufferedImage.TYPE_BYTE_GRAY);
+                        switch (board[i][j].getPiece()) {
+                            case "king":
+                                if (board[i][j].getColorString().equals("white")) {
+                                    img = ImageIO.read(new File("white-king.jpg"));
+                                } else {
+                                    img = ImageIO.read(new File("black-king.png"));
+                                }
+                                break;
+                            case "queen":
+                                if (board[i][j].getColorString().equals("white")) {
+                                    img = ImageIO.read(new File("white-queen.jpg"));
+                                } else {
+                                    img = ImageIO.read(new File("black-queen.png"));
+                                }
+                                break;
+                            case "rook":
+                                if (board[i][j].getColorString().equals("white")) {
+                                    img = ImageIO.read(new File("white-rook.jpg"));
+                                } else {
+                                    img = ImageIO.read(new File("black-rook.jpg"));
+                                }
+                                break;
+                            case "knight":
+                                if (board[i][j].getColorString().equals("white")) {
+                                    img = ImageIO.read(new File("white-knight.png"));
+                                } else {
+                                    img = ImageIO.read(new File("black-knight.jpg"));
+                                }
+                                break;
+                            case "bishop":
+                                if (board[i][j].getColorString().equals("white")) {
+                                    img = ImageIO.read(new File("white-bishop.jpg"));
+                                } else {
+                                    img = ImageIO.read(new File("black-bishop.jpg"));
+                                }
+                                break;
+                            case "pawn":
+                                if (board[i][j].getColorString().equals("white")) {
+                                    img = ImageIO.read(new File("white-pawn.jpg"));
+                                } else {
+                                    img = ImageIO.read(new File("black-pawn.jpg"));
+                                }
+                                break;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
+
+                    Image image = new ImageIcon(img).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                    Icon icon = new ImageIcon(image);
+                    buttons[i][j].setIcon(icon);
+
                 } else {
-                    buttons[i][j].setText("");
+                    buttons[i][j].setIcon(null);
                 }
             }
         }
@@ -322,6 +371,10 @@ public class GameBoardGUI {
         } else if (!tmp.getPiece().equals("null")) {
             board[x][y] = board[oX][oY];
             board[oX][oY] = new GamePiece("", "");
+
+            if (board[x][y].isStartingPos()) {
+                board[x][y].setNotStartPos();
+            }
 
             selected = null;
             reActivate();
@@ -655,7 +708,7 @@ public class GameBoardGUI {
                     buttons[x - 1][y + 2].setEnabled(true);
                     buttons[x - 1][y + 2].setBackground(highlight);
                 }
-            } if (x + 1 >= 0) {
+            } if (x + 1 < size) {
                 if (!board[x + 1][y + 2].getColorString().equals(selected.getColorString())) {
                     buttons[x + 1][y + 2].setEnabled(true);
                     buttons[x + 1][y + 2].setBackground(highlight);
