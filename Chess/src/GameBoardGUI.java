@@ -2,6 +2,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -54,7 +56,24 @@ public class GameBoardGUI {
 
         frame.getContentPane().removeAll();
 
-        genGame();
+        JPanel title = new JPanel();
+
+        JTextArea t = new JTextArea("Welcome to Chess");
+        t.setFont(new Font(t.getFont().getFontName(), t.getFont().getStyle(), 30));
+        t.setEditable(false);
+        title.add(t, BorderLayout.CENTER);
+
+        JButton play = new JButton("Play");
+        play.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                genGame();
+            }
+        });
+
+        title.add(play, BorderLayout.SOUTH);
+
+        frame.add(title);
 
         frame.revalidate();
         frame.repaint();
@@ -151,6 +170,25 @@ public class GameBoardGUI {
                 } else {
                     buttons[i][j].setBackground(new Color(140, 140, 140));
                 }
+
+                JPanel title = new JPanel();
+
+                JTextArea tl = new JTextArea("Chess: by Dylan Booth");
+                tl.setEditable(false);
+                tl.setFont(new Font(tl.getFont().getFontName(), tl.getFont().getStyle(), 20));
+
+                title.add(tl, BorderLayout.WEST);
+
+                JButton playAgain = new JButton("Play Again?");
+                playAgain.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        playAgain();
+                    }
+                });
+
+                title.add(playAgain, BorderLayout.EAST);
+                frame.add(title, BorderLayout.NORTH);
 
             }
         }
