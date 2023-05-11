@@ -379,6 +379,10 @@ public class GameBoardGUI {
             turn = !turn;
         }
 
+        if (board[x][y].getPiece().equals("pawn")) {
+            pawnToQueen(x, y);
+        }
+
         guiUpdate();
 
     }
@@ -413,10 +417,14 @@ public class GameBoardGUI {
                     checkPawnWhite(x, y);
                     if (board[x][y].isStartingPos()) {
                         buttons[x][y].setEnabled(true);
-                        buttons[x-2][y].setBackground(highlight);
-                        buttons[x-2][y].setEnabled(true);
-                        buttons[x-1][y].setBackground(highlight);
-                        buttons[x-1][y].setEnabled(true);
+                        if (board[x-1][y].getPiece().equals("null")) {
+                            if (board[x-2][y].getPiece().equals("null")) {
+                                buttons[x-2][y].setBackground(highlight);
+                                buttons[x-2][y].setEnabled(true);
+                            }
+                            buttons[x-1][y].setBackground(highlight);
+                            buttons[x-1][y].setEnabled(true);
+                        }
                     } else {
                         buttons[x][y].setEnabled(true);
                         if (board[x-1][y].getPiece().equals("null")) {
@@ -428,10 +436,14 @@ public class GameBoardGUI {
                     checkPawnBlack(x, y);
                     if (board[x][y].isStartingPos()) {
                         buttons[x][y].setEnabled(true);
-                        buttons[x+2][y].setBackground(highlight);
-                        buttons[x+2][y].setEnabled(true);
-                        buttons[x+1][y].setBackground(highlight);
-                        buttons[x+1][y].setEnabled(true);
+                        if (board[x+1][y].getPiece().equals("null")) {
+                            if (board[x+2][y].getPiece().equals("null")) {
+                                buttons[x+2][y].setBackground(highlight);
+                                buttons[x+2][y].setEnabled(true);
+                            }
+                            buttons[x+1][y].setBackground(highlight);
+                            buttons[x+1][y].setEnabled(true);
+                        }
                     } else {
                         buttons[x][y].setEnabled(true);
                         if (board[x+1][y].getPiece().equals("null")) {
@@ -839,4 +851,24 @@ public class GameBoardGUI {
             buttons[x][y-1].setBackground(highlight);
         }
     }
+
+    /**
+     * Method to make a pawn a Queen if it successfully crosses the board
+     * @param x the X coordinate of the pawn becoming a Queen
+     * @param y the Y coordinate of the pawn becoming a Queen
+     */
+    private static void pawnToQueen(int x, int y) {
+
+        if (board[x][y].getColorString().equals("white")) {
+            if (x == 0) {
+                board[x][y].pawnToQueen();
+            }
+        } else {
+            if (x == 7) {
+                board[x][y].pawnToQueen();
+            }
+        }
+
+    }
+
 }

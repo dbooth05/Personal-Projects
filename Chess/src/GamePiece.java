@@ -7,7 +7,7 @@ import java.lang.ref.SoftReference;
 
 public class GamePiece {
 
-    private String piece = ""; //String to hold what type of piece it is
+    private String piece; //String to hold what type of piece it is
     private boolean isStartPos; //Boolean value holding if piece is in starting position
     private final String colorString; //The team piece belongs to as a string
 
@@ -56,6 +56,14 @@ public class GamePiece {
      */
     public String getColorString() {
         return colorString;
+    }
+
+    /**
+     * Changes the piece from a pawn to a Queen
+     * if successfully moved across board
+     */
+    public void pawnToQueen() {
+        piece = "queen";
     }
 
 
