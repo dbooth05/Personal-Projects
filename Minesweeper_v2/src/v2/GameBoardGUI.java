@@ -363,7 +363,7 @@ public class GameBoardGUI extends JFrame {
                     buttons[i][j].setText("B");
                 } else if (board[i][j].getIsFlagged()) {
                     try {
-                        BufferedImage img = ImageIO.read(new File("flag.png"));
+                        BufferedImage img = ImageIO.read(new File("./res/flag.png"));
                         Image image = new ImageIcon(img).getImage().getScaledInstance(buttons[i][j].getWidth(), buttons[i][j].getHeight(), Image.SCALE_SMOOTH);
                         Icon icon = new ImageIcon(image);
                         buttons[i][j].setIcon((Icon) icon);
@@ -452,12 +452,12 @@ public class GameBoardGUI extends JFrame {
         if (win) {
             a.setText("YOU WON");
             System.out.println("win");
-            img = new ImageIcon("military-dancing.gif").getImage();
+            img = new ImageIcon("./res/military-dancing.gif").getImage();
 
         } else {
             a.setText("YOU LOSE");
             System.out.println("lose");
-            img = new ImageIcon("explosion-explode.gif").getImage();
+            img = new ImageIcon("./res/explosion-explode.gif").getImage();
         }
 
         Icon icon = new ImageIcon(img);
