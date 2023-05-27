@@ -4,7 +4,7 @@
 
 public class GamePiece {
 
-    String color; //holds color value of piece (Black or white)
+    private String color; //holds color value of piece (Black or white)
 
     int stackSize; //holds value of how large stack is
 
